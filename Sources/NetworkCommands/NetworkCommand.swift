@@ -1,0 +1,112 @@
+import Foundation
+
+class NetworkCommand<T: Decodable>: NSObject {
+    let serverAddress: String
+    let urlSession = URLSession.shared
+
+    init(serverAddress: String) {
+        self.serverAddress = serverAddress
+    }
+
+    func method() -> HTTPMethod {
+        .Post
+    }
+
+    func requestParameters() -> [String: String] {
+        Dictionary()
+    }
+
+    func oxFunction() -> String {
+        assertionFailure("Implement me in subclass!")
+        return ""
+    }
+
+    func requestDictionary() -> [String: AnyObject]? {
+        nil
+    }
+
+    func requestData() -> Data? {
+        nil
+    }
+
+    func usesRequestDictionary() -> Bool {
+        true
+    }
+
+    func additionalHTTPHeaderFields() -> [String: String]? {
+        nil
+    }
+
+    func execute() async throws -> T? {
+        let function = oxFunction()
+        let parameters = requestParameters()
+
+        var serverAddress = "https://" + self.serverAddress + "/"
+
+        var cSet = CharacterSet.urlQueryAllowed
+        cSet.remove(charactersIn: "/")
+
+        let encodedParameters = parameters.encodedAsURLParameters().addingPercentEncoding(withAllowedCharacters: cSet)
+
+        serverAddress += function
+        if parameters.count > 0 {
+            serverAddress += "?" + encodedParameters!
+        }
+        //print("serveraddress \(serverAddress)")
+
+        var request = URLRequest(url: URL(string: serverAddress)!)
+        request.httpMethod = method().rawValue
+
+        if method() == .Post {
+            request.setValue("application/x-www-form-urlencoded charset=utf-8", forHTTPHeaderField: "Content-Type")
+            var data: Data?
+            if usesRequestDictionary() {
+                data = requestDictionary()?.httpBodyData
+            }
+            else {
+                data = requestData()
+            }
+            request.httpBody = data
+        }
+        else {
+            // GET, PUT
+
+            var data: Data?
+
+            if usesRequestDictionary() {
+                if let dictionary = requestDictionary() {
+                    data = try! JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
+                }
+            }
+            else {
+                // TODO: Still required?
+                data = requestData()
+            }
+
+            if let data {
+                request.httpBody = data
+            }
+        }
+
+        if let additionalFields = additionalHTTPHeaderFields() {
+            for (key, value) in additionalFields {
+                request.setValue(value, forHTTPHeaderField: key)
+            }
+        }
+
+        let (data, response) = try await urlSession.data(for: request)
+
+        if let httpResponse = response as? HTTPURLResponse {
+            let statusCode = httpResponse.statusCode
+
+            if statusCode != 200 {
+                print("The server sent a \(statusCode) HTTP Status Code.")
+                return nil
+            }
+        }
+
+        let decoder = JSONDecoder()
+        return try decoder.decode(T.self, from: data)
+    }
+
+}
