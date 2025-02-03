@@ -37,6 +37,10 @@ class NetworkCommand<T: Decodable>: NSObject {
         nil
     }
 
+    func postContentType() -> String {
+        return "application/json"
+    }
+
     func execute() async throws -> T? {
         let function = oxFunction()
         let parameters = requestParameters()
@@ -58,7 +62,7 @@ class NetworkCommand<T: Decodable>: NSObject {
         request.httpMethod = method().rawValue
 
         if method() == .Post {
-            request.setValue("application/x-www-form-urlencoded charset=utf-8", forHTTPHeaderField: "Content-Type")
+            request.setValue(postContentType(), forHTTPHeaderField: "Content-Type")
             var data: Data?
             if usesRequestDictionary() {
                 data = requestDictionary()?.httpBodyData
@@ -105,6 +109,9 @@ class NetworkCommand<T: Decodable>: NSObject {
             }
         }
 
+        if T.self is EmptyResponse.Type && data.isEmpty {
+            return (EmptyResponse() as! T)
+        }
         let decoder = JSONDecoder()
         return try decoder.decode(T.self, from: data)
     }

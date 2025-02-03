@@ -6,19 +6,19 @@ import Foundation
 
 @main
 struct OXCloud: AsyncParsableCommand {
-    static let configuration = CommandConfiguration(abstract: "A utility to interact with OX Cloud.", subcommands: [Contexts.self, Users.self/*, Context.self, User.self*/])
+    static let configuration = CommandConfiguration(abstract: "A utility to interact with OX Cloud.", subcommands: [Contexts.self, Users.self, Import.self/*, Context.self, User.self*/])
 }
 
-struct HostOptions: ParsableArguments {
-    @Option(name: [.customShort("s"), .customLong("host")], help: "App Suite host omitting schema")
-    var host: String
+struct DataCenterOptions: ParsableArguments {
+    @Option(name: [.customShort("d"), .customLong("host")], help: "App Suite Data Center (eu, us, in)")
+    var dataCenter: DataCenter
 }
 
 struct BrandOptions: ParsableArguments {
-    @Option(name: [.customShort("n"), .customLong("brandname")], help: "Brand name -- only required for user provisioning")
+    @Option(name: [.customShort("n"), .customLong("brandname")], help: "Brand name")
     var brandName: String
 
-    @Option(name: [.customShort("a"), .customLong("brandauth")], help: "Brand auth -- only required for user provisioning")
+    @Option(name: [.customShort("a"), .customLong("brandauth")], help: "Brand auth")
     var brandAuth: String
 }
 
@@ -32,89 +32,28 @@ struct ContextNameOptions: ParsableArguments {
     var contextName: String
 }
 
+struct UserCredentialsOptions: ParsableArguments {
+    @Option(name: [.customShort("m"), .customLong("name")], help: "User Name")
+    var userName: String
 
-
-
-
-extension OXCloud {
-    struct Contexts: AsyncParsableCommand {
-        static let configuration = CommandConfiguration(commandName: "contexts", abstract: "Context related operations.", subcommands: [ListContexts.self, SearchContexts.self])
-    }
-
-    struct ListContexts: AsyncParsableCommand {
-        static let configuration = CommandConfiguration(commandName: "list", abstract: "List all contexts.")
-
-        @OptionGroup var hostOptions: HostOptions
-        @OptionGroup var brandOptions: BrandOptions
-        @OptionGroup var outputOptions: OutputFormatOptions
-
-        mutating func run() async throws {
-            let brandAuth = BrandAuth(brand: brandOptions.brandName, brandAuth: brandOptions.brandAuth)
-            let listContextsCommand = ListContextsCommand(brandAuth: brandAuth, serverAddress: hostOptions.host)
-            do {
-                let contexts = try await listContextsCommand.execute()
-                if let contexts {
-                    output(items: contexts.items, format: outputOptions.format)
-                }
-            }
-            catch {
-                print("An error occurred: \(error)")
-            }
-        }
-    }
-
-    struct SearchContexts: AsyncParsableCommand {
-        static let configuration = CommandConfiguration(commandName: "search", abstract: "Search a context.")
-
-        @OptionGroup var hostOptions: HostOptions
-        @OptionGroup var brandOptions: BrandOptions
-        @OptionGroup var searchOptions: SearchOptions
-        @OptionGroup var outputOptions: OutputFormatOptions
-
-        mutating func run() async throws {
-            let brandAuth = BrandAuth(brand: brandOptions.brandName, brandAuth: brandOptions.brandAuth)
-            let searchContextsCommand = SearchContextsCommand(brandAuth: brandAuth, searchString: searchOptions.query, serverAddress: hostOptions.host)
-            do {
-                let contexts = try await searchContextsCommand.execute()
-                if let contexts {
-                    output(items: contexts.items, format: outputOptions.format)
-                }
-            }
-            catch {
-                print("An error occurred: \(error)")
-            }
-        }
-    }
-
+    @Option(name: [.customShort("p"), .customLong("password")], help: "User Password")
+    var password: String
 }
 
-extension OXCloud {
-    struct Users: AsyncParsableCommand {
-        static let configuration = CommandConfiguration(commandName: "users", abstract: "User related operations.", subcommands: [ListUsers.self, SearchContexts.self])
-    }
+struct UserCreationOptions: ParsableArguments {
+    @Option(name: [.customShort("e"), .customLong("email")], help: "User Email")
+    var email: String
 
-    struct ListUsers: AsyncParsableCommand {
-        static let configuration = CommandConfiguration(commandName: "list", abstract: "List all users in a context.")
+    @Option(name: [.customShort("r"), .customLong("surname")], help: "User Surname")
+    var userSurname: String
 
-        @OptionGroup var hostOptions: HostOptions
-        @OptionGroup var brandOptions: BrandOptions
-        @OptionGroup var contextOptions: ContextNameOptions
-        @OptionGroup var outputOptions: OutputFormatOptions
+    @Option(name: [.customShort("g"), .customLong("givenname")], help: "User Given Name")
+    var userGivenname: String
+}
 
-        mutating func run() async throws {
-            let brandAuth = BrandAuth(brand: brandOptions.brandName, brandAuth: brandOptions.brandAuth)
-            let listUsersCommand = ListUsersCommand(brandAuth: brandAuth, contextName: contextOptions.contextName, serverAddress: hostOptions.host)
-            do {
-                let users = try await listUsersCommand.execute()
-                if let users {
-                    output(items: users.items, format: outputOptions.format)
-                }
-            }
-            catch {
-                print("An error occurred: \(error)")
-            }
-        }
-    }
+struct ImportPathOptions: ParsableArguments {
+    @Option(name: [.customShort("s"), .customLong("source")], help: "Import Source Path")
+    var path: String
 }
 
 func output<T: Outputtable>(items: [T], format: OutputFormat) {
@@ -160,6 +99,18 @@ func output<T: Outputtable>(items: [T], format: OutputFormat) {
             guard let data = try? encoder.encode(items) else { return }
             print(String(data: data, encoding: .utf8)!)
     }
+}
+
+func showProgress(progress: Double) {
+    let barWidth = 50
+    let filledWidth = Int(progress * Double(barWidth))
+    let emptyWidth = barWidth - filledWidth
+
+    let progressBar = String(repeating: "=", count: filledWidth) + String(repeating: " ", count: emptyWidth)
+    let percentage = Int(progress * 100)
+
+    print("\r\u{1B}[K[\(progressBar)] \(percentage)%", terminator: "")
+    fflush(__stdoutp)
 }
 
 //
