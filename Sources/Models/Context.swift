@@ -16,16 +16,6 @@ struct Context: Decodable, Encodable {
     let maxUser: Int?
     let theme: [String: String]?
 
-    var description: String {
-        """
-------------------------------------------------
-\(name)
-
-Quota: \(usedQuota) of \(maxQuota ?? -1) used
-Maximum number of users: \(maxUser ?? -1)
-"""
-    }
-
     func formattedUsedQuota(formatter: ByteCountFormatter) -> String {
         return formatter.string(fromByteCount: Int64(usedQuota))
     }
