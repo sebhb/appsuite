@@ -16,14 +16,13 @@ extension OXCloud {
     struct ListUsers: AsyncParsableCommand {
         static let configuration = CommandConfiguration(commandName: "list", abstract: "List all users in a context.")
 
-        @OptionGroup var hostOptions: DataCenterOptions
         @OptionGroup var brandOptions: BrandOptions
         @OptionGroup var contextOptions: ContextNameOptions
         @OptionGroup var outputOptions: OutputFormatOptions
 
         mutating func run() async throws {
-            let brandAuth = BrandAuth(brand: brandOptions.brandName, brandAuth: brandOptions.brandAuth)
-            let listUsersCommand = ListUsersCommand(brandAuth: brandAuth, contextName: contextOptions.contextName, serverAddress: hostOptions.dataCenter.hostName())
+            let brandAuth = BrandAuth(brand: brandOptions.brandName!, brandAuth: brandOptions.brandAuth!)
+            let listUsersCommand = ListUsersCommand(brandAuth: brandAuth, contextName: contextOptions.contextName, serverAddress: brandOptions.dataCenter!.hostName())
             do {
                 let users = try await listUsersCommand.execute()
                 if let users {
@@ -39,16 +38,15 @@ extension OXCloud {
     struct CreateUser: AsyncParsableCommand {
         static let configuration = CommandConfiguration(commandName: "create", abstract: "Create a user in a context.")
 
-        @OptionGroup var hostOptions: DataCenterOptions
         @OptionGroup var brandOptions: BrandOptions
         @OptionGroup var contextOptions: ContextNameOptions
         @OptionGroup var userCredentialsOptions: UserCredentialsOptions
         @OptionGroup var userCreationOptions: UserCreationOptions
 
         mutating func run() async throws {
-            let brandAuth = BrandAuth(brand: brandOptions.brandName, brandAuth: brandOptions.brandAuth)
+            let brandAuth = BrandAuth(brand: brandOptions.brandName!, brandAuth: brandOptions.brandAuth!)
             let newUser = NewUser(name: userCredentialsOptions.userName, givenName: userCreationOptions.userGivenname, surName: userCreationOptions.userSurname, mail: userCreationOptions.email, password: userCredentialsOptions.password, classOfService: nil)
-            let createUsersCommand = CreateUserCommand(brandAuth: brandAuth, contextName: contextOptions.contextName, newUser: newUser, serverAddress: hostOptions.dataCenter.hostName())
+            let createUsersCommand = CreateUserCommand(brandAuth: brandAuth, contextName: contextOptions.contextName, newUser: newUser, serverAddress: brandOptions.dataCenter!.hostName())
             do {
                 let user = try await createUsersCommand.execute()
                 if let user {

@@ -16,13 +16,12 @@ extension OXCloud {
     struct ListContexts: AsyncParsableCommand {
         static let configuration = CommandConfiguration(commandName: "list", abstract: "List all contexts.")
 
-        @OptionGroup var hostOptions: DataCenterOptions
         @OptionGroup var brandOptions: BrandOptions
         @OptionGroup var outputOptions: OutputFormatOptions
 
         mutating func run() async throws {
-            let brandAuth = BrandAuth(brand: brandOptions.brandName, brandAuth: brandOptions.brandAuth)
-            let listContextsCommand = ListContextsCommand(brandAuth: brandAuth, serverAddress: hostOptions.dataCenter.hostName())
+            let brandAuth = BrandAuth(brand: brandOptions.brandName!, brandAuth: brandOptions.brandAuth!)
+            let listContextsCommand = ListContextsCommand(brandAuth: brandAuth, serverAddress: brandOptions.dataCenter!.hostName())
             do {
                 let contexts = try await listContextsCommand.execute()
                 if let contexts {
@@ -38,14 +37,13 @@ extension OXCloud {
     struct SearchContexts: AsyncParsableCommand {
         static let configuration = CommandConfiguration(commandName: "search", abstract: "Search a context.")
 
-        @OptionGroup var hostOptions: DataCenterOptions
         @OptionGroup var brandOptions: BrandOptions
         @OptionGroup var searchOptions: SearchOptions
         @OptionGroup var outputOptions: OutputFormatOptions
 
         mutating func run() async throws {
-            let brandAuth = BrandAuth(brand: brandOptions.brandName, brandAuth: brandOptions.brandAuth)
-            let searchContextsCommand = SearchContextsCommand(brandAuth: brandAuth, searchString: searchOptions.query, serverAddress: hostOptions.dataCenter.hostName())
+            let brandAuth = BrandAuth(brand: brandOptions.brandName!, brandAuth: brandOptions.brandAuth!)
+            let searchContextsCommand = SearchContextsCommand(brandAuth: brandAuth, searchString: searchOptions.query, serverAddress: brandOptions.dataCenter!.hostName())
             do {
                 let contexts = try await searchContextsCommand.execute()
                 if let contexts {

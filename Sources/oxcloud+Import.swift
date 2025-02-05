@@ -17,7 +17,6 @@ extension OXCloud {
     struct ImportMails: AsyncParsableCommand {
         static let configuration = CommandConfiguration(commandName: "mails", abstract: "Upload an email for a user.")
 
-        @OptionGroup var hostOptions: DataCenterOptions
         @OptionGroup var userCredentialsOptions: UserCredentialsOptions
         @OptionGroup var pathOptions: ImportPathOptions
 
@@ -29,7 +28,7 @@ extension OXCloud {
                     return
                 }
 
-                let loginCommand = LoginCommand(userName: userCredentialsOptions.userName, password: userCredentialsOptions.password, serverAddress: hostOptions.dataCenter.hostName())
+                let loginCommand = LoginCommand(userName: userCredentialsOptions.userName, password: userCredentialsOptions.password, serverAddress: userCredentialsOptions.server)
 
                 guard let session = try await loginCommand.execute() else {
                     print("Could not acquire session.")
@@ -38,13 +37,13 @@ extension OXCloud {
                 // print("Session: \(session.session)")
 
                 for mailPath in files {
-                    let importMailCommand = ImportMailCommand(session: session.session, mailPath: mailPath, serverAddress: hostOptions.dataCenter.hostName())
+                    let importMailCommand = ImportMailCommand(session: session.session, mailPath: mailPath, serverAddress: userCredentialsOptions.server)
                     guard let _ = try await importMailCommand.execute() else {
                         print("Could not upload mail.")
                         return
                     }
                 }
-                let logoutCommand = LogoutCommand(session: session.session, serverAddress: hostOptions.dataCenter.hostName())
+                let logoutCommand = LogoutCommand(session: session.session, serverAddress: userCredentialsOptions.server)
                 guard let _ = try await logoutCommand.execute() else {
                     print("Could not acquire session.")
                     return
