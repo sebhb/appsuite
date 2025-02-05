@@ -113,6 +113,7 @@ class NetworkCommand<T: Decodable>: NSObject {
             return (EmptyResponse() as! T)
         }
         let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
         return try decoder.decode(T.self, from: data)
     }
 
