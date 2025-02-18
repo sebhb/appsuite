@@ -10,7 +10,7 @@ import Foundation
 
 extension OXCloud {
     struct Contexts: AsyncParsableCommand {
-        static let configuration = CommandConfiguration(commandName: "contexts", abstract: "Context related operations.", subcommands: [ListContexts.self, SearchContexts.self])
+        static let configuration = CommandConfiguration(commandName: "contexts", abstract: "Context related operations.", subcommands: [ListContexts.self, SearchContexts.self, GetContextTheme.self, SetContextTheme.self])
     }
 
     struct ListContexts: AsyncParsableCommand {
@@ -56,4 +56,52 @@ extension OXCloud {
         }
     }
 
+    struct GetContextTheme: AsyncParsableCommand {
+        static let configuration = CommandConfiguration(commandName: "gettheme", abstract: "Gets a context's theme.")
+
+        @OptionGroup var brandOptions: BrandOptions
+        @OptionGroup var contextName: ContextNameOptions
+
+        mutating func run() async throws {
+            let brandAuth = BrandAuth(brand: brandOptions.brandName!, brandAuth: brandOptions.brandAuth!)
+            let getThemeCommand = GetContextThemeCommand(brandAuth: brandAuth, contextName: contextName.contextName, serverAddress: brandOptions.dataCenter!.hostName())
+            do {
+                let theme = try await getThemeCommand.execute()
+                if let theme {
+                    let encoder = JSONEncoder()
+                    encoder.outputFormatting = .prettyPrinted
+
+                    guard let data = try? encoder.encode(theme) else { return }
+                    print(String(data: data, encoding: .utf8)!)
+                }
+            }
+            catch {
+                print("An error occurred: \(error)")
+            }
+        }
+    }
+
+    struct SetContextTheme: AsyncParsableCommand {
+        static let configuration = CommandConfiguration(commandName: "settheme", abstract: "Set Context Theme.")
+
+        @OptionGroup var brandOptions: BrandOptions
+        @OptionGroup var contextName: ContextNameOptions
+        @OptionGroup var themeOptions: ThemeOptions
+
+        mutating func run() async throws {
+            let theme = Theme.from(themeOptions)
+
+            let brandAuth = BrandAuth(brand: brandOptions.brandName!, brandAuth: brandOptions.brandAuth!)
+            let setThemeCommand = SetContextThemeCommand(brandAuth: brandAuth, contextName: contextName.contextName, theme: theme, serverAddress: brandOptions.dataCenter!.hostName())
+            do {
+                let result = try await setThemeCommand.execute()
+                if let _ = result {
+                    print("Theme set successfully.")
+                }
+            }
+            catch {
+                print("An error occurred: \(error)")
+            }
+        }
+    }
 }

@@ -2,12 +2,12 @@
 //  File.swift
 //  oxcloud
 //
-//  Created by Sebastian Krauß on 31.01.25.
+//  Created by Sebastian Krauß on 05.02.25.
 //
 
 import Foundation
 
-class ListUsersCommand: NetworkCommand<ArrayWrapper<User>> {
+class GetContextThemeCommand: NetworkCommand<Theme> {
 
     let brandAuth: BrandAuth
     let contextName: String
@@ -23,7 +23,7 @@ class ListUsersCommand: NetworkCommand<ArrayWrapper<User>> {
     }
 
     override func requestParameters() -> [String : String] {
-        return ["name": contextName, "includepermissions": "true"]
+        return ["pattern": "\(contextName)"]
     }
 
     override func additionalHTTPHeaderFields() -> [String: String]? {
@@ -31,7 +31,16 @@ class ListUsersCommand: NetworkCommand<ArrayWrapper<User>> {
     }
 
     override func oxFunction() -> String {
-        return "cloudapi/v2/users"
+        return "cloudapi/v2/contexts"
     }
 
+    override func result(from data: Data) throws -> Theme? {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        let contexts = try decoder.decode([Context].self, from: data)
+        guard let firstContext = contexts.first else {
+            return nil
+        }
+        return firstContext.theme
+    }
 }

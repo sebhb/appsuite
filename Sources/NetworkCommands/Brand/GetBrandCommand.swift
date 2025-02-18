@@ -2,19 +2,17 @@
 //  File.swift
 //  oxcloud
 //
-//  Created by Sebastian Krauß on 31.01.25.
+//  Created by Sebastian Krauß on 05.02.25.
 //
 
 import Foundation
 
-class ListUsersCommand: NetworkCommand<ArrayWrapper<User>> {
+class GetBrandCommand: NetworkCommand<Theme> {
 
     let brandAuth: BrandAuth
-    let contextName: String
 
-    init(brandAuth: BrandAuth, contextName: String, serverAddress: String) {
+    init(brandAuth: BrandAuth, serverAddress: String) {
         self.brandAuth = brandAuth
-        self.contextName = contextName
         super.init(serverAddress: serverAddress)
     }
 
@@ -22,16 +20,12 @@ class ListUsersCommand: NetworkCommand<ArrayWrapper<User>> {
         .Get
     }
 
-    override func requestParameters() -> [String : String] {
-        return ["name": contextName, "includepermissions": "true"]
-    }
-
     override func additionalHTTPHeaderFields() -> [String: String]? {
         return ["Authorization": "Basic \(brandAuth.bodyAuth())"]
     }
 
     override func oxFunction() -> String {
-        return "cloudapi/v2/users"
+        return "cloudapi/v2/brand/theme"
     }
 
 }

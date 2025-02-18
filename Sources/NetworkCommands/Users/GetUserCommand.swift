@@ -7,14 +7,16 @@
 
 import Foundation
 
-class ListUsersCommand: NetworkCommand<ArrayWrapper<User>> {
+class GetUserCommand: NetworkCommand<User> {
 
     let brandAuth: BrandAuth
     let contextName: String
+    let username: String
 
-    init(brandAuth: BrandAuth, contextName: String, serverAddress: String) {
+    init(brandAuth: BrandAuth, contextName: String, usernameQuery: String, serverAddress: String) {
         self.brandAuth = brandAuth
         self.contextName = contextName
+        self.username = usernameQuery
         super.init(serverAddress: serverAddress)
     }
 
@@ -31,7 +33,7 @@ class ListUsersCommand: NetworkCommand<ArrayWrapper<User>> {
     }
 
     override func oxFunction() -> String {
-        return "cloudapi/v2/users"
+        return "cloudapi/v2/users/\(username)"
     }
 
 }

@@ -9,10 +9,10 @@ import ArgumentParser
 import Foundation
 
 struct OutputFormatOptions: ParsableArguments {
-    @Option(name: [.customShort("o"), .customLong("output")], help: "Output format (list, yaml)"/*, defaultValue: "list"*/)
+    @Option(name: [.customShort("o"), .customLong("output")], help: "Output format (list, json)"/*, defaultValue: "list"*/)
     var format: OutputFormat = .list
 }
 
 enum OutputFormat: String, ExpressibleByArgument {
-    case list, yaml
+    case list, json
 }

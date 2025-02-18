@@ -6,14 +6,14 @@ import Foundation
 
 @main
 struct OXCloud: AsyncParsableCommand {
-    static let configuration = CommandConfiguration(abstract: "A utility to interact with OX Cloud.", subcommands: [Contexts.self, Users.self, Import.self/*, Context.self, User.self*/])
+    static let configuration = CommandConfiguration(abstract: "A utility to interact with OX Cloud.", subcommands: [Contexts.self, Users.self, Import.self, Brand.self/*, Context.self, User.self*/])
 }
 
 struct BrandOptions: ParsableArguments {
     @Option(name: [.customLong("defaultbrand")], help: "The name of the brand in the defaults")
     var defaultName: String?
 
-    @Option(name: [.customShort("d"), .customLong("datacenter")], help: "App Suite Data Center (eu, us, in)")
+    @Option(name: [.customShort("d"), .customLong("datacenter")], help: "App Suite Data Center (eu, us, asia)")
     var dataCenter: DataCenter?
 
     @Option(name: [.customShort("n"), .customLong("brandname")], help: "Brand name")
@@ -24,6 +24,17 @@ struct BrandOptions: ParsableArguments {
 
     mutating func validate() throws {
         if brandName == nil || brandAuth == nil {
+            if let defaultName = defaultName {
+                let allBrands = configuredBrands()
+                if let brand = allBrands.first(where: { $0.name == defaultName }) {
+                    brandName = brand.brandName
+                    brandAuth = brand.brandAuth
+                    dataCenter = brand.dataCenter
+                    return
+                }
+                throw ValidationError("No default brand with priovided name configured.")
+            }
+
             if let brand = defaultBrand() {
                 brandName = brand.brandName
                 brandAuth = brand.brandAuth
@@ -31,19 +42,27 @@ struct BrandOptions: ParsableArguments {
                 return
             }
 
-            guard let defaultName = defaultName else {
-                throw ValidationError("Brandname and brandauth have to be set if no default brand is provided.")
-            }
 
-            let allBrands = configuredBrands()
-            if let brand = allBrands.first(where: { $0.name == defaultName }) {
-                brandName = brand.brandName
-                brandAuth = brand.brandAuth
-                dataCenter = brand.dataCenter
-                return
-            }
             throw ValidationError("Brandname and brandauth have to be set if no brand name is provided.")
         }
+    }
+}
+
+struct ClassOfServiceOptions: ParsableArguments {
+    @Option(name: [.customLong("set")], help: "The classes of service to set")
+    var classesToSet: [String] = []
+
+    @Option(name: [.customLong("add")], help: "The classes of service to add")
+    var classesToAdd: [String] = []
+
+    mutating func validate() throws {
+        let numberOfClassesToSet = classesToSet.count
+        let numberOfClassesToAdd = classesToAdd.count
+
+        if numberOfClassesToSet == 0 && numberOfClassesToAdd > 0 { return }
+        if numberOfClassesToSet > 0 && numberOfClassesToAdd == 0 { return }
+
+        throw ValidationError("have to either specify classes to set or classes to add. You can not do both or none.")
     }
 }
 
@@ -55,6 +74,11 @@ struct SearchOptions: ParsableArguments {
 struct ContextNameOptions: ParsableArguments {
     @Option(name: [.customShort("c"), .customLong("context")], help: "Context name")
     var contextName: String
+}
+
+struct UserNameOptions: ParsableArguments {
+    @Option(name: [.customLong("name")], help: "User Name")
+    var userName: String
 }
 
 struct UserCredentialsOptions: ParsableArguments {
@@ -77,6 +101,69 @@ struct UserCreationOptions: ParsableArguments {
 
     @Option(name: [.customShort("g"), .customLong("givenname")], help: "User Given Name")
     var userGivenname: String
+}
+
+struct ThemeOptions: ParsableArguments {
+    @Option(name: [.customLong("mainColor")], help: "Theme's mainColor")
+    var mainColor: String?
+
+    @Option(name: [.customLong("linkColor")], help: "Theme's linkColor")
+    var linkColor: String?
+
+    @Option(name: [.customLong("toolbarColor")], help: "Theme's toolbarColor")
+    var toolbarColor: String?
+
+    @Option(name: [.customLong("logoUrlLight")], help: "Theme's logoUrlLight")
+    var logoUrlLight: String?
+
+    @Option(name: [.customLong("logoUrlDark")], help: "Theme's logoUrlDark")
+    var logoUrlDark: String?
+
+    @Option(name: [.customLong("logoWidth")], help: "Theme's logoWidth")
+    var logoWidth: String?
+
+    @Option(name: [.customLong("logoHeight")], help: "Theme's logoHeight")
+    var logoHeight: String?
+
+    @Option(name: [.customLong("topbarBackground")], help: "Theme's topbarBackground")
+    var topbarBackground: String?
+
+    @Option(name: [.customLong("topbarHover")], help: "Theme's topbarHover")
+    var topbarHover: String?
+
+    @Option(name: [.customLong("topbarColor")], help: "Theme's topbarColor")
+    var topbarColor: String?
+
+    @Option(name: [.customLong("topbarSelected")], help: "Theme's topbarSelected")
+    var topbarSelected: String?
+
+    @Option(name: [.customLong("listSelected")], help: "Theme's listSelected")
+    var listSelected: String?
+
+    @Option(name: [.customLong("listHover")], help: "Theme's listHover")
+    var listHover: String?
+
+    @Option(name: [.customLong("listSelectedFocus")], help: "Theme's listSelectedFocus")
+    var listSelectedFocus: String?
+
+    @Option(name: [.customLong("folderBackground")], help: "Theme's folderBackground")
+    var folderBackground: String?
+
+    @Option(name: [.customLong("folderSelected")], help: "Theme's folderSelected")
+    var folderSelected: String?
+
+    @Option(name: [.customLong("folderHover")], help: "Theme's folderHover")
+    var folderHover: String?
+
+    @Option(name: [.customLong("folderSelectedFocus")], help: "Theme's folderSelectedFocus")
+    var folderSelectedFocus: String?
+
+    @Option(name: [.customLong("mailDetailCSS")], help: "Theme's mailDetailCSS")
+    var mailDetailCSS: String?
+
+    @Option(name: [.customLong("serverContact")], help: "Theme's serverContact")
+    var serverContact: String?
+
 }
 
 struct ImportPathOptions: ParsableArguments {
@@ -118,7 +205,7 @@ struct DefaultBrand: Decodable {
         brandName = try container.decode(String.self, forKey: .brandName)
         brandAuth = try container.decode(String.self, forKey: .brandAuth)
         contexts = try container.decode([DefaultContext].self, forKey: .contexts)
-        isDefault = try container.decode(Bool?.self, forKey: .isDefault) ?? false
+        isDefault = try? container.decode(Bool?.self, forKey: .isDefault) ?? false
     }
 }
 
@@ -133,6 +220,14 @@ func configuredBrands() -> [DefaultBrand] {
 
 func defaultBrand() -> DefaultBrand? {
     return configuredBrands().filter { $0.isDefault ?? false }.first
+}
+
+func output<T: Outputtable>(item: T) {
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = .prettyPrinted
+
+    guard let data = try? encoder.encode(item) else { return }
+    print(String(data: data, encoding: .utf8)!)
 }
 
 func output<T: Outputtable>(items: [T], format: OutputFormat) {
@@ -171,7 +266,7 @@ func output<T: Outputtable>(items: [T], format: OutputFormat) {
                 }
                 print(line)
             }
-        case .yaml:
+        case .json:
             let encoder = JSONEncoder()
             encoder.outputFormatting = .prettyPrinted
 
