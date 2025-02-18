@@ -108,7 +108,11 @@ class NetworkCommand<T: Decodable>: NSObject {
                 return nil
             }
         }
+        
+        return try result(from: data)
+    }
 
+    func result(from data: Data) throws -> T? {
         if T.self is EmptyResponse.Type && data.isEmpty {
             return (EmptyResponse() as! T)
         }

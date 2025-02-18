@@ -9,7 +9,7 @@ import ArgumentParser
 import Foundation
 
 enum DataCenter: String, ExpressibleByArgument {
-    case eu, es, `in`
+    case eu, es, asia
 
     func hostName() -> String {
         return rawValue + ".appsuite.cloud"

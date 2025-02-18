@@ -16,13 +16,39 @@ struct User: Decodable, Encodable {
     let displayName: String
     let classOfService: [String]?
     let isContextAdmin: Bool
+    let language: String?
+    let aliases: [String]?
+    let timezone: String?
+    let spamLevel: String?
     let unifiedQuota: Int?
+    let mailQuota: Int?
+    let fileQuota: Int?
+    let usedMailQuota: Int?
+    let usedFileQuota: Int?
     let usedQuota: Int?
+    let guestId: Int?
+    let uid: Int?
+    let webLoginEnabled: Bool?
+    let userPermissions: UserPermissions?
+    let userAdminEnabled: Bool?
 
     func formattedUsedQuota(formatter: ByteCountFormatter) -> String? {
         guard let usedQuota else { return nil }
         return formatter.string(fromByteCount: Int64(usedQuota))
     }
+}
+
+struct userImage: Decodable, Encodable {
+    let image: String?
+    let type: String?
+}
+
+struct UserPermissions: Decodable, Encodable {
+    let send: Bool
+    let receive: Bool
+    let maillogin: Bool
+    let weblogin: Bool
+    let editPassword: Bool
 }
 
 extension User: Listable {

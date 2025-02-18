@@ -12,11 +12,14 @@ import Foundation
 struct Context: Decodable, Encodable {
     let name: String
     let maxQuota: Int?
-    let usedQuota: Int
+    let usedQuota: Int?
     let maxUser: Int?
-    let theme: [String: String]?
+    let theme: Theme?
 
-    func formattedUsedQuota(formatter: ByteCountFormatter) -> String {
+    func formattedUsedQuota(formatter: ByteCountFormatter) -> String? {
+        guard let usedQuota else {
+            return nil
+        }
         return formatter.string(fromByteCount: Int64(usedQuota))
     }
 
@@ -60,7 +63,7 @@ extension Context: Listable {
         switch column {
             case "name": return name
             case "maxQuota": return formattedMaxQuota(formatter: formatter) ?? "-"
-            case "usedQuota": return formattedUsedQuota(formatter: formatter)
+            case "usedQuota": return formattedUsedQuota(formatter: formatter) ?? "-"
             default: return ""
         }
     }

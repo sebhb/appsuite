@@ -10,7 +10,7 @@ import Foundation
 
 extension OXCloud {
     struct Users: AsyncParsableCommand {
-        static let configuration = CommandConfiguration(commandName: "users", abstract: "User related operations.", subcommands: [ListUsers.self, CreateUser.self])
+        static let configuration = CommandConfiguration(commandName: "users", abstract: "User related operations.", subcommands: [ListUsers.self, GetUser.self, CreateUser.self, AlterClassOfServiceUser.self])
     }
 
     struct ListUsers: AsyncParsableCommand {
@@ -35,6 +35,28 @@ extension OXCloud {
         }
     }
 
+    struct GetUser: AsyncParsableCommand {
+        static let configuration = CommandConfiguration(commandName: "get", abstract: "Gets a user by username in a context.")
+
+        @OptionGroup var brandOptions: BrandOptions
+        @OptionGroup var contextOptions: ContextNameOptions
+        @OptionGroup var searchOptions: SearchOptions
+
+        mutating func run() async throws {
+            let brandAuth = BrandAuth(brand: brandOptions.brandName!, brandAuth: brandOptions.brandAuth!)
+            let getUserCommand = GetUserCommand(brandAuth: brandAuth, contextName: contextOptions.contextName, usernameQuery: searchOptions.query, serverAddress: brandOptions.dataCenter!.hostName())
+            do {
+                let user = try await getUserCommand.execute()
+                if let user {
+                    output(item: user)
+                }
+            }
+            catch {
+                print("An error occurred: \(error)")
+            }
+        }
+    }
+
     struct CreateUser: AsyncParsableCommand {
         static let configuration = CommandConfiguration(commandName: "create", abstract: "Create a user in a context.")
 
@@ -50,7 +72,7 @@ extension OXCloud {
             do {
                 let user = try await createUsersCommand.execute()
                 if let user {
-                    output(items: [user], format: .yaml)
+                    output(item: user)
                 }
             }
             catch {
@@ -59,5 +81,46 @@ extension OXCloud {
         }
     }
 
+    struct AlterClassOfServiceUser: AsyncParsableCommand {
+        static let configuration = CommandConfiguration(commandName: "cos", abstract: "Alter class of service for a user in a context.")
+
+        @OptionGroup var brandOptions: BrandOptions
+        @OptionGroup var contextOptions: ContextNameOptions
+        @OptionGroup var userNameOptions: UserNameOptions
+        @OptionGroup var classesOfServiceOptions: ClassOfServiceOptions
+
+        mutating func run() async throws {
+            let brandAuth = BrandAuth(brand: brandOptions.brandName!, brandAuth: brandOptions.brandAuth!)
+
+            var classesToSet: [String] = []
+
+            if classesOfServiceOptions.classesToSet.count > 0 {
+                classesToSet = classesOfServiceOptions.classesToSet
+            }
+            else {
+                let getUserCommand = GetUserCommand(brandAuth: brandAuth, contextName: contextOptions.contextName, usernameQuery: userNameOptions.userName, serverAddress: brandOptions.dataCenter!.hostName())
+                do {
+                    let user = try await getUserCommand.execute()
+                    if let user {
+                        classesToSet = (user.classOfService ?? []) + classesOfServiceOptions.classesToAdd
+                    }
+                }
+                catch {
+                    print("An error occurred: \(error)")
+                }
+            }
+
+            let changeCosCommand = AlterUserCOSCommand(brandAuth: brandAuth, contextName: contextOptions.contextName, username: userNameOptions.userName, classesOfService: classesToSet, serverAddress: brandOptions.dataCenter!.hostName())
+            do {
+                let result = try await changeCosCommand.execute()
+                if let _ = result {
+                    print("Classes of service altered successfully.")
+                }
+            }
+            catch {
+                print("An error occurred: \(error)")
+            }
+        }
+    }
 
 }
