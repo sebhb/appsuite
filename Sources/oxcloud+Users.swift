@@ -10,7 +10,7 @@ import Foundation
 
 extension OXCloud {
     struct Users: AsyncParsableCommand {
-        static let configuration = CommandConfiguration(commandName: "users", abstract: "User related operations.", subcommands: [ListUsers.self, GetUser.self, CreateUser.self, AlterClassOfServiceUser.self])
+        static let configuration = CommandConfiguration(commandName: "users", abstract: "User related operations.", subcommands: [ListUsers.self, GetUser.self, CreateUser.self, AlterClassOfServiceUser.self, CreateTokenLoginUser.self])
     }
 
     struct ListUsers: AsyncParsableCommand {
@@ -115,6 +115,25 @@ extension OXCloud {
                 let result = try await changeCosCommand.execute()
                 if let _ = result {
                     print("Classes of service altered successfully.")
+                }
+            }
+            catch {
+                print("An error occurred: \(error)")
+            }
+        }
+    }
+
+    struct CreateTokenLoginUser: AsyncParsableCommand {
+        static let configuration = CommandConfiguration(commandName: "createtokenlogin", abstract: "Create a token login URL for a user.")
+
+        @OptionGroup var userCredentials: UserCredentialsOptions
+
+        mutating func run() async throws {
+            let createTokenLoginCommand = CreateTokenLoginCommand(username: userCredentials.userName, password: userCredentials.password, serverAddress: userCredentials.server)
+            do {
+                let url = try await createTokenLoginCommand.execute()
+                if let url {
+                    print("Login URL: \(url)")
                 }
             }
             catch {
