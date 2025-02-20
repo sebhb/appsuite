@@ -42,7 +42,6 @@ struct BrandOptions: ParsableArguments {
                 return
             }
 
-
             throw ValidationError("Brandname and brandauth have to be set if no brand name is provided.")
         }
     }
