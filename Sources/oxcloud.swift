@@ -103,6 +103,8 @@ struct UserCreationOptions: ParsableArguments {
 }
 
 struct ThemeOptions: ParsableArguments {
+    // https://documentation.open-xchange.com/8/ui/theming/dynamic-theming.html#specifying-a-theme
+
     @Option(name: [.customLong("mainColor")], help: "Theme's mainColor")
     var mainColor: String?
 

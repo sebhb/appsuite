@@ -82,7 +82,7 @@ extension OXCloud {
     }
 
     struct SetContextTheme: AsyncParsableCommand {
-        static let configuration = CommandConfiguration(commandName: "settheme", abstract: "Set Context Theme.")
+        static let configuration = CommandConfiguration(commandName: "settheme", abstract: "Set Context Theme.", discussion: "See https://documentation.open-xchange.com/8/ui/theming/dynamic-theming.html#specifying-a-theme for keys and their meaning.")
 
         @OptionGroup var brandOptions: BrandOptions
         @OptionGroup var contextName: ContextNameOptions
