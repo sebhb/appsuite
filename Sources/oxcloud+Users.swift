@@ -133,7 +133,7 @@ extension OXCloud {
             do {
                 let url = try await createTokenLoginCommand.execute()
                 if let url {
-                    print("Login URL: \(url)")
+                    print(url)
                 }
             }
             catch {

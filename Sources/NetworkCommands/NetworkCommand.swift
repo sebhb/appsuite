@@ -56,7 +56,6 @@ class NetworkCommand<T: Decodable>: NSObject {
         if parameters.count > 0 {
             serverAddress += "?" + encodedParameters!
         }
-        //print("serveraddress \(serverAddress)")
 
         var request = URLRequest(url: URL(string: serverAddress)!)
         request.httpMethod = method().rawValue
@@ -104,11 +103,17 @@ class NetworkCommand<T: Decodable>: NSObject {
             let statusCode = httpResponse.statusCode
 
             if statusCode != 200 {
-                print("The server sent a \(statusCode) HTTP Status Code.")
-                return nil
+                let error = NSError(domain: "NetworkCommand", code: statusCode, userInfo: nil)
+                throw error
             }
         }
-        
+
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        if let error = try decoder.decode(ServerError?.self, from: data) {
+            throw error
+        }
+
         return try result(from: data)
     }
 
