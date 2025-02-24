@@ -82,7 +82,6 @@ class NetworkCommand<T: Decodable>: NSObject {
                 }
             }
             else {
-                // TODO: Still required?
                 data = requestData()
             }
 
@@ -110,7 +109,7 @@ class NetworkCommand<T: Decodable>: NSObject {
 
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        if let error = try decoder.decode(ServerError?.self, from: data) {
+        if let error = try? decoder.decode(ServerError?.self, from: data) {
             throw error
         }
 

@@ -15,3 +15,8 @@ struct Session: Decodable {
 //    let userId: Int
 //    let contextId: Int
 }
+
+struct RemoteSession {
+    let session: String
+    let server: String
+}
