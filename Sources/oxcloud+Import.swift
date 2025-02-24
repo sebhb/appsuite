@@ -11,11 +11,11 @@ import Foundation
 extension OXCloud {
 
     struct Import: AsyncParsableCommand {
-        static let configuration = CommandConfiguration(commandName: "import", abstract: "Import operations.", subcommands: [ImportMails.self, ImportAppointment.self])
+        static let configuration = CommandConfiguration(commandName: "import", abstract: "Import operations.", subcommands: [ImportMails.self, ImportAppointment.self, ImportFiles.self])
     }
 
     struct ImportMails: AsyncParsableCommand {
-        static let configuration = CommandConfiguration(commandName: "mails", abstract: "Upload an email for a user.")
+        static let configuration = CommandConfiguration(commandName: "mails", abstract: "Upload an email for a user.", discussion: "Uploads all eml files in `source` to the specified user's inbox. This command does not validate whether there is enough quoata available.")
 
         @OptionGroup var userCredentialsOptions: UserCredentialsOptions
         @OptionGroup var pathOptions: ImportPathOptions
@@ -28,26 +28,8 @@ extension OXCloud {
                     return
                 }
 
-                let loginCommand = LoginCommand(userName: userCredentialsOptions.userName, password: userCredentialsOptions.password, serverAddress: userCredentialsOptions.server)
-
-                guard let session = try await loginCommand.execute() else {
-                    print("Could not acquire session.")
-                    return
-                }
-                let remoteSession = RemoteSession(session: session.session, server: userCredentialsOptions.server)
-
-                for mailPath in files {
-                    let importMailCommand = ImportMailCommand(session: remoteSession, mailPath: mailPath)
-                    guard let _ = try await importMailCommand.execute() else {
-                        print("Could not upload mail.")
-                        return
-                    }
-                }
-                let logoutCommand = LogoutCommand(session: remoteSession)
-                guard let _ = try await logoutCommand.execute() else {
-                    print("Could not acquire session.")
-                    return
-                }
+                let uploadMailsWorker = UploadMailsWorker(userCredentialsOptions: userCredentialsOptions)
+                try await uploadMailsWorker.uploadMails(paths: files)
             }
             catch {
                 print("An error occurred: \(error)")
@@ -56,7 +38,7 @@ extension OXCloud {
     }
 
     struct ImportAppointment: AsyncParsableCommand {
-        static let configuration = CommandConfiguration(commandName: "appointment", abstract: "Creates appointments.", discussion: """
+        static let configuration = CommandConfiguration(commandName: "appointments", abstract: "Creates appointments.", discussion: """
             Create appointments. The `source` points to a file containing an array of JSON objects describing the appointments to be created.
             The description for an appointment looks like this:
             {
@@ -88,4 +70,26 @@ extension OXCloud {
         }
     }
 
+    struct ImportFiles: AsyncParsableCommand {
+        static let configuration = CommandConfiguration(commandName: "files", abstract: "Uploads Files.", discussion: "Uploads all files at `source` to the specified user's Drive root folder. This command does not do any validation whether the user has Drive capabilities enabled or whether there is enough quoata available.")
+
+        @OptionGroup var userCredentialsOptions: UserCredentialsOptions
+        @OptionGroup var pathOptions: ImportPathOptions
+
+        mutating func run() async throws {
+            let uploadFilesWorker = UploadFilesWorker(userCredentialsOptions: userCredentialsOptions)
+            do {
+                let files = try FileManager.default.contentsOfDirectory(atPath: pathOptions.path).filter { !$0.hasPrefix(".") }.map( { pathOptions.path + "/" + $0 } )
+                guard files.count > 0 else {
+                    print("No files not found in \(pathOptions.path)")
+                    return
+                }
+
+                try await uploadFilesWorker.uploadFiles(files)
+            }
+            catch {
+                print("An error occurred: \(error)")
+            }
+        }
+    }
 }
