@@ -9,11 +9,11 @@ import Foundation
 
 class LogoutCommand: NetworkCommand<EmptyResponse> {
 
-    let session: String
+    let remoteSession: RemoteSession
 
-    init(session: String, serverAddress: String) {
-        self.session = session
-        super.init(serverAddress: serverAddress)
+    init(session: RemoteSession) {
+        self.remoteSession = session
+        super.init(serverAddress: remoteSession.server)
     }
 
     override func method() -> HTTPMethod {
@@ -21,7 +21,7 @@ class LogoutCommand: NetworkCommand<EmptyResponse> {
     }
 
     override func requestParameters() -> [String : String] {
-        return ["action": "logout", "session": session]
+        return ["action": "logout", "session": remoteSession.session]
     }
     
     override func oxFunction() -> String {

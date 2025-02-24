@@ -9,14 +9,14 @@ import Foundation
 
 class ImportMailCommand: NetworkCommand<GenericDataResponse> {
 
-    let session: String
+    let session: RemoteSession
     let mailPath: String
     let boundary: String = "----Boundary-\(UUID().uuidString)"
 
-    init(session: String, mailPath: String, serverAddress: String) {
+    init(session: RemoteSession, mailPath: String) {
         self.session = session
         self.mailPath = mailPath
-        super.init(serverAddress: serverAddress)
+        super.init(serverAddress: session.server)
     }
 
     override func method() -> HTTPMethod {
@@ -28,7 +28,7 @@ class ImportMailCommand: NetworkCommand<GenericDataResponse> {
     }
 
     override func requestParameters() -> [String : String] {
-        return ["action": "import", "folder": "default0/INBOX", "force": "true", "session": session]
+        return ["action": "import", "folder": "default0/INBOX", "force": "true", "session": session.session]
     }
 
     override func usesRequestDictionary() -> Bool {
