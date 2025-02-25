@@ -7,15 +7,9 @@
 
 import Foundation
 
-class UploadFilesWorker {
+class UploadFilesWorker: InfostoreBaseWorker {
 
-    let userCredentialsOptions: UserCredentialsOptions
-    var remoteSession: RemoteSession!
     var driveRootFolder: String!
-
-    init(userCredentialsOptions: UserCredentialsOptions) {
-        self.userCredentialsOptions = userCredentialsOptions
-    }
 
     func uploadFiles(_ paths: [String]) async throws {
         try await login()
@@ -28,6 +22,7 @@ class UploadFilesWorker {
             }
             let filename = file.components(separatedBy: "/").last!
             let uploadFileCommand = UploadFileCommand(session: remoteSession, filename: filename, fileContents: fileContents, targetfolderId: driveRootFolder)
+            print("Uploading \(filename)")
             guard let _ = try await uploadFileCommand.execute() else {
                 print("Could not upload file.")
                 return
@@ -37,16 +32,6 @@ class UploadFilesWorker {
         try await logout()
     }
 
-    private func login() async throws {
-        let loginCommand = LoginCommand(userName: userCredentialsOptions.userName, password: userCredentialsOptions.password, serverAddress: userCredentialsOptions.server)
-
-        guard let session = try await loginCommand.execute() else {
-            print("Could not acquire session.")
-            return
-        }
-        remoteSession = RemoteSession(session: session.session, server: userCredentialsOptions.server)
-    }
-
     private func getUserSettings() async throws {
         let getRootFolderCommand = GetConfigurationCommand(session: remoteSession, property: .driveRootFolder)
         guard let rootFolder = try await getRootFolderCommand.execute() else {
@@ -54,15 +39,6 @@ class UploadFilesWorker {
             return
         }
         driveRootFolder = rootFolder.data
-    }
-
-    private func logout() async throws {
-        let logoutCommand = LogoutCommand(session: remoteSession)
-        guard let _ = try await logoutCommand.execute() else {
-            print("Could not acquire session.")
-            return
-        }
-        remoteSession = nil
     }
 
 }

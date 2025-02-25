@@ -7,17 +7,11 @@
 
 import Foundation
 
-class AppointmentCreationWorker {
+class AppointmentCreationWorker: InfostoreBaseWorker {
 
-    let userCredentialsOptions: UserCredentialsOptions
-    var remoteSession: RemoteSession!
     var userTimezone: String!
     var calendarFolder: String!
     var invitee: Person!
-
-    init(userCredentialsOptions: UserCredentialsOptions) {
-        self.userCredentialsOptions = userCredentialsOptions
-    }
 
     func createAppointments(appointmentRequests: [AppointmentRequest]) async throws {
         try await login()
@@ -34,17 +28,7 @@ class AppointmentCreationWorker {
 
         try await logout()
     }
-
-    private func login() async throws {
-        let loginCommand = LoginCommand(userName: userCredentialsOptions.userName, password: userCredentialsOptions.password, serverAddress: userCredentialsOptions.server)
-
-        guard let session = try await loginCommand.execute() else {
-            print("Could not acquire session.")
-            return
-        }
-        remoteSession = RemoteSession(session: session.session, server: userCredentialsOptions.server)
-    }
-
+    
     private func getUserSettings() async throws {
         let getTimezoneCommand = GetConfigurationCommand(session: remoteSession, property: .timezone)
         guard let timezone = try await getTimezoneCommand.execute() else {
@@ -70,15 +54,6 @@ class AppointmentCreationWorker {
         userTimezone = timezone.data
         calendarFolder = calendar.data
         invitee = me.data
-    }
-
-    private func logout() async throws {
-        let logoutCommand = LogoutCommand(session: remoteSession)
-        guard let _ = try await logoutCommand.execute() else {
-            print("Could not acquire session.")
-            return
-        }
-        remoteSession = nil
     }
 
 }
