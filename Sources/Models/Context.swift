@@ -7,8 +7,6 @@
 
 import Foundation
 
-
-
 struct Context: Decodable, Encodable {
     let name: String
     let maxQuota: Int?

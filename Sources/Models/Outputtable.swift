@@ -17,8 +17,6 @@ protocol Listable {
     static func configuration(for items: [Listable], formatter: ByteCountFormatter) -> ColumnOutputConfiguration
 
     func displayValue(for column: String, formatter: ByteCountFormatter) -> String
-
-
 }
 
 extension Listable {
