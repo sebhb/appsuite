@@ -17,7 +17,7 @@ import Foundation
 /// `startTime` and `endTime` are in the format `20250219T200000` which looks like a specific form of ISO 8601 in the user's local timezone.
 struct AppointmentRequest: Decodable {
     let title: String
-    let descrpition: String?
+    let description: String?
     let startTime: String
     let endTime: String
     let location: String?
@@ -28,7 +28,7 @@ struct AppointmentRequest: Decodable {
         dateFormatter.dateFormat = "yyyyMMdd'T'HHmmss"
         let startTime = dateFormatter.string(from: startDate)
         let endTime = dateFormatter.string(from: endDate!)
-        return AppointmentRequest(title: title, descrpition: description, startTime: startTime, endTime: endTime, location: location)
+        return AppointmentRequest(title: title, description: description, startTime: startTime, endTime: endTime, location: location)
     }
 }
 
@@ -90,7 +90,7 @@ struct Appointment: Decodable, Encodable {
         let organizer = person.organizer
         let attendee = person.attendee
 
-        let appointment = Appointment(folder: folderId, startDate: start, endDate: end, class: "PUBLIC", transp: "OPAQUE", organizer: organizer, attendees: [attendee], attendeePrivileges: "DEFAULT", summary: request.title, location: request.location, description: request.descrpition, categories: nil)
+        let appointment = Appointment(folder: folderId, startDate: start, endDate: end, class: "PUBLIC", transp: "OPAQUE", organizer: organizer, attendees: [attendee], attendeePrivileges: "DEFAULT", summary: request.title, location: request.location, description: request.description, categories: nil)
 
         return appointment
     }

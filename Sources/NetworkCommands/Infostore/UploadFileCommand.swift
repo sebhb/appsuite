@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import UniformTypeIdentifiers
 
 struct FileResponse: Decodable {
     let lastModified: Int
@@ -53,25 +52,13 @@ class UploadFileCommand: NetworkCommand<UploadFileCommandResponse> {
     }
 
     override func requestData() -> Data {
-        var mimeType = "application/octet-stream"
-        if let pathExtension = filename.split(separator: ".").last {
-            if #available(macOS 11.0, *) {
-                if let utType = UTType(filenameExtension: "\(pathExtension)") {
-                    if let mime = utType.preferredMIMEType {
-                        mimeType = mime
-                    }
-                }
-            }
-        }
-
         var data = Data()
         let boundaryPrefix = "--\(boundary)\r\n"
         data.append(boundaryPrefix.data(using: .utf8)!)
         data.append("Content-Disposition: form-data; name=\"json\"\r\n\r\n".data(using: .utf8)!)
         data.append("{\"folder_id\":\"\(targetFolderId)\",\"description\":\"\"}\r\n".data(using: .utf8)!)
         data.append(boundaryPrefix.data(using: .utf8)!)
-        data.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(filename)\"\r\n".data(using: .utf8)!)
-        data.append("Content-Type: \(mimeType)\r\n\r\n".data(using: .utf8)!)
+        data.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(filename)\"\r\n\r\n".data(using: .utf8)!)
         data.append(fileContents)
         data.append("\r\n".data(using: .utf8)!)
         data.append("--\(boundary)--\r\n".data(using: .utf8)!)

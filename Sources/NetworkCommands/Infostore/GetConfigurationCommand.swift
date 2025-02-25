@@ -12,6 +12,7 @@ enum ConfigurationProperty: String {
     case calendarFolder
     case timezone
     case driveRootFolder
+    case tasksFolder
 
     var urlPath: String {
         switch self {
@@ -21,6 +22,8 @@ enum ConfigurationProperty: String {
                 return "timezone"
             case .driveRootFolder:
                 return "folder/infostore"
+            case .tasksFolder:
+                return "folder/tasks"
         }
     }
 }
