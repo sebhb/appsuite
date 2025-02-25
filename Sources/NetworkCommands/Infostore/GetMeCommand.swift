@@ -7,10 +7,6 @@
 
 import Foundation
 
-struct GetMeResponse: Decodable {
-    let data: Person
-}
-
 ///
 /// Note: Contrary to the belief that /user/me would be more appropriate, it's not.
 /// /user/me only contains a display name, but not first and last name separately.

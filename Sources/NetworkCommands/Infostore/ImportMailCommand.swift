@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ImportMailCommand: NetworkCommand<GenericDataResponse> {
+class ImportMailCommand: NetworkCommand<ImportMailResponse> {
 
     let session: RemoteSession
     let mailPath: String

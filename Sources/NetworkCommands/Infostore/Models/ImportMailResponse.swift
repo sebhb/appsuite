@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct GenericDataResponse: Decodable {
+struct ImportMailResponse: Decodable {
     let data: [[String: String]]
 }
