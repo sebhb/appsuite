@@ -90,10 +90,8 @@ class NetworkCommand<T: Decodable>: NSObject {
             }
         }
 
-        if let additionalFields = additionalHTTPHeaderFields() {
-            for (key, value) in additionalFields {
-                request.setValue(value, forHTTPHeaderField: key)
-            }
+        additionalHTTPHeaderFields()?.forEach { key, value in
+            request.setValue(value, forHTTPHeaderField: key)
         }
 
         let (data, response) = try await urlSession.data(for: request)

@@ -21,14 +21,15 @@ struct AppointmentRequest: Decodable {
     let startTime: String
     let endTime: String
     let location: String?
+    let rrule: String? // Recurrence rules like "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR"; section 3.8.5.3 of https://www.rfc-editor.org/rfc/rfc5545.txt
 
-    static func from(title: String, description: String? = nil, startDate: Date, duration: Int = 60, location: String? = nil) -> AppointmentRequest {
+    static func from(title: String, description: String? = nil, startDate: Date, duration: Int = 60, location: String? = nil, repeatRule: String? = nil) -> AppointmentRequest {
         let endDate = Calendar.current.date(byAdding: .minute, value: duration, to: startDate)
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyyMMdd'T'HHmmss"
         let startTime = dateFormatter.string(from: startDate)
         let endTime = dateFormatter.string(from: endDate!)
-        return AppointmentRequest(title: title, description: description, startTime: startTime, endTime: endTime, location: location)
+        return AppointmentRequest(title: title, description: description, startTime: startTime, endTime: endTime, location: location, rrule: repeatRule)
     }
 }
 
