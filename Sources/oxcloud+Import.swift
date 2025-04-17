@@ -19,6 +19,8 @@ extension OXCloud {
 
         @OptionGroup var userCredentialsOptions: UserCredentialsOptions
         @OptionGroup var pathOptions: ImportPathOptions
+        @OptionGroup var importMailOptions: ImportMailOptions
+        @OptionGroup var importStretchOptions: ImportStretchOptions
 
         mutating func run() async throws {
             do {
@@ -28,7 +30,7 @@ extension OXCloud {
                     return
                 }
 
-                let uploadMailsWorker = UploadMailsWorker(userCredentialsOptions: userCredentialsOptions)
+                let uploadMailsWorker = UploadMailsWorker(userCredentialsOptions: userCredentialsOptions, adjustrecipient: importMailOptions.adjustRecipient, stretchPeriod: importStretchOptions.stretchPeriod)
                 try await uploadMailsWorker.uploadMails(paths: files)
             }
             catch {

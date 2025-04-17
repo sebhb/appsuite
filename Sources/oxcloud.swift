@@ -172,6 +172,16 @@ struct ImportPathOptions: ParsableArguments {
     var path: String
 }
 
+struct ImportStretchOptions: ParsableArguments {
+    @Option(name: [.customLong("stretchPeriod")], help: "The period (in days) over which to randomly distribute emails. Dates will be left untouched if omitted.")
+    var stretchPeriod: Int?
+}
+
+struct ImportMailOptions: ParsableArguments {
+    @Option(name: [.customLong("adjustRecipient")], help: "Set the recipient to the user importing the mails")
+    var adjustRecipient: Bool = false
+}
+
 struct DefaultContext: Decodable {
     let name: String
     let identifier: String
