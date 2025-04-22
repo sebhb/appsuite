@@ -9,7 +9,7 @@ import Foundation
 
 ///
 /// Note: Because someone at OX decided it was a good idea to use both camel case AND snake case at the same time
-/// for he naming of properties (`cuType` and `partStat` vs `display_name`), for encoding and decoding of any of the structs below,
+/// for the naming of properties (`cuType` and `partStat` vs `display_name`), for encoding and decoding of any of the structs below,
 /// `keyDecodingStrategy` must not be set to `.convertFromSnakeCase`.
 ///
 
