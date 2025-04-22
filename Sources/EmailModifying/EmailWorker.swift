@@ -20,7 +20,7 @@ class EmailWorker {
         self.email = email
         guard let text = String(data: email, encoding: .utf8) else { return nil }
         mailText = text
-        guard let (tmpHeader, tmpBody) = splitEmailIntoHeaderAndBody(emailText: text) else { return nil }
+        guard let (tmpHeader, tmpBody) = splitEmailIntoHeaderAndBody() else { return nil }
         self.header = tmpHeader
         self.body = tmpBody
     }
@@ -39,14 +39,29 @@ class EmailWorker {
         }
         if let date {
             headerFields = headerByRemoving(field: "Date", from: headerFields)
-            let formatter = DateFormatter()
-            formatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss Z" // RFC 5322 format
-            formatter.locale = Locale(identifier: "en_US_POSIX") // POSIX locale ensures consistent parsing
-            formatter.timeZone = TimeZone(secondsFromGMT: 0) // Default to UTC
+            let formatter = DateFormatter.mailDateFormatter
             headerFields.append("Date: \(formatter.string(from: date))")
         }
 
         header = headerFields.joined(separator: headerFieldSeparator)
+    }
+
+    func mailDate() -> Date? {
+        guard let dateEntry = header.split(separator: headerFieldSeparator).first(where: { $0.hasPrefix("Date:") }) else {
+            return nil
+        }
+        var dateString = dateEntry.dropFirst("Date: ".count)
+        if let range = dateString.range(of: "(") {
+            let index = dateString.distance(from: dateString.startIndex, to: range.lowerBound)
+            dateString = dateString.dropLast(dateString.count - index)
+        }
+        let formatters = DateFormatter.mailDateFormatters
+        for formatter in formatters {
+            if let date = formatter.date(from: String(dateString)) {
+                return date
+            }
+        }
+        return nil
     }
 
     private func headerByRemoving(field: String, from header: [String]) -> [String] {
@@ -74,21 +89,21 @@ class EmailWorker {
         return result
     }
 
-    private func splitEmailIntoHeaderAndBody(emailText: String) -> (header: String, body: String)? {
-        if let result = splitEmailIntoHeaderAndBody(emailText: emailText, separator: separator) {
+    private func splitEmailIntoHeaderAndBody() -> (header: String, body: String)? {
+        if let result = splitEmailIntoHeaderAndBody(separator: separator) {
             return result
         }
         separator = "\n\n"
         headerFieldSeparator = "\n"
-        if let result = splitEmailIntoHeaderAndBody(emailText: emailText, separator: separator) {
+        if let result = splitEmailIntoHeaderAndBody(separator: separator) {
             return result
         }
         return nil
     }
 
-    private func splitEmailIntoHeaderAndBody(emailText: String, separator: String) -> (header: String, body: String)? {
+    private func splitEmailIntoHeaderAndBody(separator: String) -> (header: String, body: String)? {
         // Split the email into header and body using the delimiter "\r\n\r\n"
-        let components = emailText.components(separatedBy: separator)
+        let components = mailText.components(separatedBy: separator)
 
         // Ensure there are at least two parts (header and body)
         guard components.count >= 2 else {

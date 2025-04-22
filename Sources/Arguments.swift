@@ -185,3 +185,8 @@ struct ImportMailOptions: ParsableArguments {
     @Option(name: [.customLong("adjustRecipient")], help: "Set the recipient to the user importing the mails")
     var adjustRecipient: Bool = false
 }
+
+struct GenerateAppointmentsOptions: ParsableArguments {
+    @Option(name: [.customLong("days")], help: "The amount of days into the past and into the future to generate appointments")
+    var days: Int = 185
+}

@@ -6,7 +6,7 @@ import Foundation
 
 @main
 struct OXCloud: AsyncParsableCommand {
-    static let configuration = CommandConfiguration(abstract: "A utility to interact with OX Cloud.", subcommands: [Contexts.self, Users.self, Import.self, Brand.self/*, Context.self, User.self*/])
+    static let configuration = CommandConfiguration(abstract: "A utility to interact with OX Cloud.", subcommands: [Contexts.self, Users.self, Import.self, Brand.self, Generate.self/*, Context.self, User.self*/])
 }
 
 struct DefaultContext: Decodable {

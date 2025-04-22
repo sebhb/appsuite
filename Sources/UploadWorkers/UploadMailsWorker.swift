@@ -23,27 +23,32 @@ class UploadMailsWorker: InfostoreBaseWorker {
         try await login()
         try await getUserSettings()
 
+        var mails: [Data] = []
+
         for mailPath in paths {
-            guard var mailData = try? Data(contentsOf: URL(fileURLWithPath: mailPath)) else { continue }
+            guard let mailData = try? Data(contentsOf: URL(fileURLWithPath: mailPath)) else { continue }
+            mails.append(mailData)
+        }
 
-            if adjustRecipient || stretchPeriod != nil {
-                guard let mailWorker = EmailWorker(email: mailData) else { continue }
+        let recipient = adjustRecipient ? self.recipient!.email1 : nil
+        if (recipient != nil) || (stretchPeriod != nil) {
+            let modifyWorker = EmailImportModifier(mails: mails, recipient: recipient, stretchPeriod: stretchPeriod)
+            mails = modifyWorker.alteredMails()
+        }
 
-                let recipient = adjustRecipient ? self.recipient!.email1 : nil
-                let date = stretchPeriod != nil ? Date.randomDateInPast(days: stretchPeriod!) : nil
-
-                mailWorker.rewrite(recipient: recipient, date: date)
-                mailData = mailWorker.resultingMail()
-            }
-
-            let importMailCommand = ImportMailCommand(session: remoteSession, mailData: mailData)
-            guard let _ = try await importMailCommand.execute() else {
-                print("Could not upload mail.")
-                return
-            }
+        for data in mails {
+            try await importMail(mailData: data)
         }
 
         try await logout()
+    }
+
+    private func importMail(mailData: Data) async throws {
+        let importMailCommand = ImportMailCommand(session: remoteSession, mailData: mailData)
+        guard let _ = try await importMailCommand.execute() else {
+            print("Could not upload mail.")
+            return
+        }
     }
 
     private func getUserSettings() async throws {
