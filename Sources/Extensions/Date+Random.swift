@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  oxcloud
-//
-//  Created by Sebastian Krauß on 11.04.25.
-//
-
 import Foundation
 
 extension Date {

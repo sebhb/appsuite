@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  oxcloud
-//
-//  Created by Sebastian Krauß on 24.02.25.
-//
-
 import Foundation
 
 class UploadFilesWorker: InfostoreBaseWorker {

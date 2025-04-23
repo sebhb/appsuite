@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  oxcloud
-//
-//  Created by Sebastian Krauß on 22.02.25.
-//
-
 import Foundation
 
 class AppointmentCreationWorker: InfostoreBaseWorker {
@@ -35,21 +28,18 @@ class AppointmentCreationWorker: InfostoreBaseWorker {
             print("Could not acquire timezone.")
             return
         }
-        //print("Timezone: \(timezone.data)")
 
         let getCalendarCommand = GetConfigurationCommand(session: remoteSession, property: .calendarFolder)
         guard let calendar = try await getCalendarCommand.execute() else {
             print("Could not acquire calendar.")
             return
         }
-        //print("Calendar: \(calendar.data)")
 
         let getMeCommand = GetMeCommand(session: remoteSession)
         guard let me = try await getMeCommand.execute() else {
             print("Could not acquire calendar.")
             return
         }
-        //print("Me: \(me.data)")
 
         userTimezone = timezone.data
         calendarFolder = calendar.data

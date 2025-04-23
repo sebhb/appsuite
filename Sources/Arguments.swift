@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  oxcloud
-//
-//  Created by Sebastian Krauß on 17.04.25.
-//
-
 import Foundation
 import ArgumentParser
 

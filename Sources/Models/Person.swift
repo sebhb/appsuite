@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  oxcloud
-//
-//  Created by Sebastian Krauß on 22.02.25.
-//
-
 import Foundation
 
 struct Person: Decodable, Encodable {

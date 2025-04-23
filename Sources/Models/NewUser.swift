@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  oxcloud
-//
-//  Created by Sebastian Krauß on 01.02.25.
-//
-
 import Foundation
 
 struct NewUser: Decodable, Encodable {
