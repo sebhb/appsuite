@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  oxcloud
-//
-//  Created by Sebastian Krauß on 24.02.25.
-//
-
 import Foundation
 
 class UploadMailsWorker: InfostoreBaseWorker {
@@ -23,12 +16,7 @@ class UploadMailsWorker: InfostoreBaseWorker {
         try await login()
         try await getUserSettings()
 
-        var mails: [Data] = []
-
-        for mailPath in paths {
-            guard let mailData = try? Data(contentsOf: URL(fileURLWithPath: mailPath)) else { continue }
-            mails.append(mailData)
-        }
+        guard var mails = try loadMails(from: paths) else { return }
 
         let recipient = adjustRecipient ? self.recipient!.email1 : nil
         if (recipient != nil) || (stretchPeriod != nil) {
@@ -37,13 +25,23 @@ class UploadMailsWorker: InfostoreBaseWorker {
         }
 
         for data in mails {
-            try await importMail(mailData: data)
+            try await uploadMail(data)
         }
 
         try await logout()
     }
 
-    private func importMail(mailData: Data) async throws {
+    private func loadMails(from paths: [String]) throws -> [Data]? {
+        var mails: [Data] = []
+        
+        for mailPath in paths {
+            guard let mailData = try? Data(contentsOf: URL(fileURLWithPath: mailPath)) else { continue }
+            mails.append(mailData)
+        }
+        return mails
+    }
+
+    private func uploadMail(_ mailData: Data) async throws {
         let importMailCommand = ImportMailCommand(session: remoteSession, mailData: mailData)
         guard let _ = try await importMailCommand.execute() else {
             print("Could not upload mail.")
@@ -61,6 +59,5 @@ class UploadMailsWorker: InfostoreBaseWorker {
         }
         recipient = me.data
     }
-
     
 }

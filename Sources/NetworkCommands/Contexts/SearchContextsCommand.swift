@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  oxcloud
-//
-//  Created by Sebastian Krauß on 31.01.25.
-//
-
 import Foundation
 
 class SearchContextsCommand: ListContextsCommand {

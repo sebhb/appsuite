@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  oxcloud
-//
-//  Created by Sebastian Krauß on 21.02.25.
-//
-
 import Foundation
 
 enum ConfigurationProperty: String {

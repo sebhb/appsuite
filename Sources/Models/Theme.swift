@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  oxcloud
-//
-//  Created by Sebastian Krauß on 05.02.25.
-//
-
 import Foundation
 
 struct Theme: Decodable, Encodable {

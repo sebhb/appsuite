@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  oxcloud
-//
-//  Created by Sebastian Krauß on 14.04.25.
-//
-
 import Foundation
 
 class EmailWorker {

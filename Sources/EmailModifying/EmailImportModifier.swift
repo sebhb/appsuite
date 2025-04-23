@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  oxcloud
-//
-//  Created by Sebastian Krauß on 22.04.25.
-//
-
 import Foundation
 
 struct DatedMail {
