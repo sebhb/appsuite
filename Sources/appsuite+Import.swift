@@ -1,7 +1,7 @@
 import ArgumentParser
 import Foundation
 
-extension OXCloud {
+extension Appsuite {
 
     struct Import: AsyncParsableCommand {
         static let configuration = CommandConfiguration(commandName: "import", abstract: "Import operations.", subcommands: [ImportMails.self, ImportAppointment.self, ImportFiles.self, ImportTasks.self])

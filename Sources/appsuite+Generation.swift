@@ -1,7 +1,7 @@
 import ArgumentParser
 import Foundation
 
-extension OXCloud {
+extension Appsuite {
 
     struct Generate: AsyncParsableCommand {
         static let configuration = CommandConfiguration(commandName: "generate", abstract: "Data generation operations.", subcommands: [GenerateAppointments.self])
