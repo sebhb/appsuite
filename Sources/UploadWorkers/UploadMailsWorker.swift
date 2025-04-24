@@ -18,14 +18,14 @@ class UploadMailsWorker: InfostoreBaseWorker {
 
         guard var mails = try loadMails(from: paths) else { return }
 
-        let recipient = adjustRecipient ? self.recipient!.email1 : nil
-        if (recipient != nil) || (stretchPeriod != nil) {
-            let modifyWorker = EmailImportModifier(mails: mails, recipient: recipient, stretchPeriod: stretchPeriod)
+        let mailRecipient = adjustRecipient ? self.recipient!.email1 : nil
+        if (mailRecipient != nil) || (stretchPeriod != nil) {
+            let modifyWorker = EmailImportModifier(mails: mails, recipient: mailRecipient, stretchPeriod: stretchPeriod)
             mails = modifyWorker.alteredMails()
         }
 
-        for data in mails {
-            try await uploadMail(data)
+        for mail in mails {
+            try await uploadMail(mail)
         }
 
         try await logout()
