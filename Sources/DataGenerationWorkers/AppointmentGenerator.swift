@@ -47,11 +47,11 @@ class AppointmentGenerator {
         var templatesToRemove: [AppointmentTemplate] = []
 
         for template in appointmentDesciptions {
-            if !template.weekdays.isEmpty {
-                guard template.weekdays.contains(weekdayNumber) else {
-                    continue
-                }
+            let possibleDays = template.weekdays.isEmpty ? [2, 3, 4, 5, 6] : template.weekdays
+            guard possibleDays.contains(weekdayNumber) else {
+                continue
             }
+
             let rrule = template.rrule
             let isEventHappening = rrule != nil ? true : Double.random(in: 0..<1) < (template.probabilityOfTakingPlace ?? 1.0)
             guard isEventHappening else {
