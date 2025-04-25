@@ -41,3 +41,4 @@ struct Person: Decodable, Encodable {
         return organizer
     }
 }
+

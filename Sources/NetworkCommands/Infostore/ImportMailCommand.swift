@@ -29,18 +29,8 @@ class ImportMailCommand: NetworkCommand<ImportMailResponse> {
     }
 
     override func requestData() -> Data {
-        var data = Data()
-        let boundaryPrefix = "--\(boundary)\r\n"
-
-        data.append(boundaryPrefix.data(using: .utf8)!)
-        data.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(UUID().uuidString).eml\"\r\n".data(using: .utf8)!)
-        data.append("Content-Type: message/rfc822\r\n\r\n".data(using: .utf8)!)
-        data.append(mailData)
-        data.append("\r\n".data(using: .utf8)!)
-        data.append("--\(boundary)--\r\n".data(using: .utf8)!)
-
-        return data
-
+        let multipart = Multipart(name: "file", filename: "\(UUID().uuidString).eml", contentType: "message/rfc822", content: mailData)
+        return try! [multipart].multipartFormData(boundary: boundary)
     }
 
     override func oxFunction() -> String {
