@@ -33,23 +33,23 @@ class UploadFileCommand: NetworkCommand<UploadFileCommandResponse> {
     }
 
     override func requestData() -> Data {
-        var data = Data()
-        let boundaryPrefix = "--\(boundary)\r\n"
-        data.append(boundaryPrefix.data(using: .utf8)!)
-        data.append("Content-Disposition: form-data; name=\"json\"\r\n\r\n".data(using: .utf8)!)
-        data.append("{\"folder_id\":\"\(targetFolderId)\",\"description\":\"\"}\r\n".data(using: .utf8)!)
-        data.append(boundaryPrefix.data(using: .utf8)!)
-        data.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(filename)\"\r\n\r\n".data(using: .utf8)!)
-        data.append(fileContents)
-        data.append("\r\n".data(using: .utf8)!)
-        data.append("--\(boundary)--\r\n".data(using: .utf8)!)
+        let target = UploadTarget(folder_id: targetFolderId, description: "")
+        let targetPart = Multipart(name: "json", content: target)
+
+        let filePart = Multipart(name: "file", filename: filename, content: fileContents)
+
+        let data = try! [targetPart, filePart].multipartFormData(boundary: boundary)
 
         return data
-
     }
 
     override func oxFunction() -> String {
         return "appsuite/api/files"
     }
 
+}
+
+struct UploadTarget: Encodable {
+    let folder_id: String
+    let description: String
 }
