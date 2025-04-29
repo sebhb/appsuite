@@ -4,7 +4,7 @@ import Foundation
 extension Appsuite {
 
     struct Import: AsyncParsableCommand {
-        static let configuration = CommandConfiguration(commandName: "import", abstract: "Import operations.", subcommands: [ImportMails.self, ImportAppointment.self, ImportFiles.self, ImportTasks.self])
+        static let configuration = CommandConfiguration(commandName: "import", abstract: "Import operations.", subcommands: [ImportMails.self, ImportAppointment.self, ImportFiles.self, ImportTasks.self, ImportContacts.self])
     }
 
     struct ImportMails: AsyncParsableCommand {
@@ -111,6 +111,27 @@ extension Appsuite {
                 let tasks: [TaskRequest] = try jsonDecoder.decode([TaskRequest].self, from: data)
 
                 try await taskCreationWorker.createTasks(tasks)
+            }
+            catch {
+                print("An error occurred: \(error)")
+            }
+        }
+    }
+
+    struct ImportContacts: AsyncParsableCommand {
+        static let configuration = CommandConfiguration(commandName: "contacts", abstract: "Creates Contacts.", discussion: "")
+
+        @OptionGroup var userCredentialsOptions: UserCredentialsOptions
+        @OptionGroup var pathOptions: ImportPathOptions
+
+        mutating func run() async throws {
+            let personCreationWorker = PersonCreationWorker(userCredentialsOptions: userCredentialsOptions)
+            do {
+                let data = try Data(contentsOf: URL(fileURLWithPath: pathOptions.path))
+                let jsonDecoder = JSONDecoder()
+                let tasks: [NewPersonRequest] = try jsonDecoder.decode([NewPersonRequest].self, from: data)
+
+                try await personCreationWorker.createPersons(tasks, basePath: pathOptions.path)
             }
             catch {
                 print("An error occurred: \(error)")
