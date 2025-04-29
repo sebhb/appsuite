@@ -119,7 +119,27 @@ extension Appsuite {
     }
 
     struct ImportContacts: AsyncParsableCommand {
-        static let configuration = CommandConfiguration(commandName: "contacts", abstract: "Creates Contacts.", discussion: "")
+        static let configuration = CommandConfiguration(commandName: "contacts", abstract: "Creates Contacts.", discussion: """
+            Create Contacts. The `source` points to a file containing an array of JSON objects describing the contacts to be created.
+            The description for a contact looks like this:
+            {
+                "firstName": "Jon",
+                "lastName": "Doe",
+                "displayName": "Jon Doe",
+                "email": "jon.doe@example.com",
+                "streetHome": "1 Main Street",
+                "postalCodeHome": "04106",
+                "cityHome": "South Portland",
+                "stateHome": "ME",
+                "countryHome": "USA",
+                "avatarPath": "jon.png"
+            }
+
+            Note that `firstName`, `lastName` and `displayName` are required values while all other values are optional.
+            `avatarPath` is the relative path (from source) to an avatar. Supported formats are JPG and PNG.
+            Also note that only "simple" path operations are supported. Referencing a subdirectory (e.g. "avatars/marketing/jon_doe.png") does work but traversing the hierarchy up using ".." is not supported. "~" is not evaluated, either.
+            If a subdirectory is referenced, the platform's path separator has to be used.
+            """)
 
         @OptionGroup var userCredentialsOptions: UserCredentialsOptions
         @OptionGroup var pathOptions: ImportPathOptions
