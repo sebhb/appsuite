@@ -1,12 +1,11 @@
 import Foundation
 
-class NewPersonWithAvatarCommand: NetworkCommand<ContactCreationResponse> {
+class NewPersonWithAvatarCommand: MultipartNetworkCommand<ContactCreationResponse> {
 
     let remoteSession: RemoteSession
     let newPerson: NewPerson
     let avatarData: Data
     let avatarContentType: String
-    let boundary: String = "----Boundary-\(UUID().uuidString)"
 
     init(session: RemoteSession, newPerson: NewPerson, avatarData: Data, contentType: String) {
         self.remoteSession = session
@@ -16,24 +15,12 @@ class NewPersonWithAvatarCommand: NetworkCommand<ContactCreationResponse> {
         super.init(serverAddress: remoteSession.server)
     }
 
-    override func method() -> HTTPMethod {
-        .Post
-    }
-
-    override func postContentType() -> String {
-        return "multipart/form-data; boundary=" + boundary
-    }
-
     override func requestParameters() -> [String : String] {
         return ["action": "new", "force_json_response": "true", "session": remoteSession.session]
     }
 
     override func oxFunction() -> String {
         return "appsuite/api/addressbooks"
-    }
-
-    override func usesRequestDictionary() -> Bool {
-        return false
     }
 
     override func requestData() -> Data? {
