@@ -21,7 +21,7 @@ class ImportMailCommand: NetworkCommand<ImportMailResponse> {
     }
 
     override func requestParameters() -> [String : String] {
-        return ["action": "import", "folder": "default0/INBOX", "force": "true", "session": session.session]
+        return ["action": "import", "folder": "default0/INBOX", "force": "true", "force_json_response": "true", "session": session.session]
     }
 
     override func usesRequestDictionary() -> Bool {
