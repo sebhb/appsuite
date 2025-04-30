@@ -30,4 +30,14 @@ enum ImageKind: String, CaseIterable {
         }
         return nil
     }
+
+    static func image(basePath: String, imagePath: String) -> (kind: ImageKind, data: Data)? {
+        if let kind = ImageKind.fromFileExtension(imagePath.pathExtension()) {
+            let completeAvatarPath = basePath.appendingPathComponent(imagePath)
+            if let data = try? Data(contentsOf: URL(fileURLWithPath: completeAvatarPath)) {
+                return (kind, data)
+            }
+        }
+        return nil
+    }
 }

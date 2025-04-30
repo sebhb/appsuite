@@ -21,4 +21,13 @@ extension String {
         pathcomponents.removeLast()
         return pathSeparator + pathcomponents.joined(separator: pathSeparator)
     }
+
+    func appendingPathComponent(_ pathComponent: String) -> String {
+#if os(Windows)
+        let pathSeparator = "\\"
+#else
+        let pathSeparator = "/"
+#endif
+        return self + (self.hasSuffix(pathSeparator) ? "" : pathSeparator) + pathComponent
+    }
 }

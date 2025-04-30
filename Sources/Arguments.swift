@@ -36,3 +36,8 @@ struct GenerateAppointmentsOptions: ParsableArguments {
     @Option(name: [.customLong("days")], help: "The amount of days into the past and into the future to generate appointments")
     var days: Int = 185
 }
+
+struct GenerateContactsOptions: ParsableArguments {
+    @Option(name: [.customLong("numberOfContacts")], help: "The number of contacts to generate")
+    var numberOfContacts: Int = 20
+}

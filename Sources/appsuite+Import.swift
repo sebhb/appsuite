@@ -17,7 +17,7 @@ extension Appsuite {
 
         mutating func run() async throws {
             do {
-                let files = try FileManager.default.contentsOfDirectory(atPath: pathOptions.path).filter { $0.hasSuffix(".eml") }.map( { pathOptions.path + "/" + $0 } )
+                let files = try FileManager.default.contentsOfDirectory(atPath: pathOptions.path).filter { $0.hasSuffix(".eml") }.map { pathOptions.path + "/" + $0 }
                 guard files.count > 0 else {
                     print(".eml files not found in \(pathOptions.path)")
                     return
@@ -74,7 +74,7 @@ extension Appsuite {
         mutating func run() async throws {
             let uploadFilesWorker = UploadFilesWorker(userCredentialsOptions: userCredentialsOptions)
             do {
-                let files = try FileManager.default.contentsOfDirectory(atPath: pathOptions.path).filter { !$0.hasPrefix(".") }.map( { pathOptions.path + "/" + $0 } )
+                let files = try FileManager.default.contentsOfDirectory(atPath: pathOptions.path).filter { !$0.hasPrefix(".") }.map { pathOptions.path + "/" + $0 }
                 guard files.count > 0 else {
                     print("No files not found in \(pathOptions.path)")
                     return
@@ -149,9 +149,9 @@ extension Appsuite {
             do {
                 let data = try Data(contentsOf: URL(fileURLWithPath: pathOptions.path))
                 let jsonDecoder = JSONDecoder()
-                let tasks: [NewPersonRequest] = try jsonDecoder.decode([NewPersonRequest].self, from: data)
-
-                try await personCreationWorker.createPersons(tasks, basePath: pathOptions.path)
+                let requests: [NewPersonRequest] = try jsonDecoder.decode([NewPersonRequest].self, from: data)
+                let requestsWithAvatars = requests.map { NewPersonWithAvatar.from($0, basePath: pathOptions.path.removingLastPathComponent()) }
+                try await personCreationWorker.createPersons(requestsWithAvatars)
             }
             catch {
                 print("An error occurred: \(error)")
