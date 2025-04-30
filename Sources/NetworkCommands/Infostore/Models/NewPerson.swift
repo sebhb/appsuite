@@ -12,7 +12,7 @@ struct NewPerson: Decodable, Encodable {
     let country_home: String?
     let folder_id: String
 
-    static func from(_ request: NewPersonRequest, folder: String) -> NewPerson {
+    static func from(_ request: NewPersonWithAvatar, folder: String) -> NewPerson {
         return NewPerson(
             first_name: request.firstName,
             last_name: request.lastName,
@@ -39,4 +39,42 @@ struct NewPersonRequest: Decodable, Encodable {
     let stateHome: String?
     let countryHome: String?
     let avatarPath: String?
+}
+
+struct NewPersonWithAvatar {
+    let firstName: String
+    let lastName: String
+    let displayName: String
+    let email: String?
+    let streetHome: String?
+    let postalCodeHome: String?
+    let cityHome: String?
+    let stateHome: String?
+    let countryHome: String?
+    let avatarData: Data?
+    let avatarContentType: ImageKind?
+
+    static func from(_ request: NewPersonRequest, basePath: String) -> NewPersonWithAvatar {
+        var avatarData: Data? = nil
+        var imageKind: ImageKind? = nil
+        if let avatarPath = request.avatarPath {
+            if let avatar = ImageKind.image(basePath: basePath, imagePath: avatarPath) {
+                avatarData = avatar.data
+                imageKind = avatar.kind
+            }
+        }
+        return NewPersonWithAvatar(
+            firstName: request.firstName,
+            lastName: request.lastName,
+            displayName: request.displayName,
+            email: request.email,
+            streetHome: request.streetHome,
+            postalCodeHome: request.postalCodeHome,
+            cityHome: request.cityHome,
+            stateHome: request.stateHome,
+            countryHome: request.countryHome,
+            avatarData: avatarData,
+            avatarContentType: imageKind
+        )
+    }
 }

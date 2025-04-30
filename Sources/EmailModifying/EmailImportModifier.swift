@@ -51,7 +51,7 @@ class EmailImportModifier {
             mailsByDate.append(DatedMail(date: date, mail: mail))
         }
         mailsByDate.sort { $0.date < $1.date }
-        mails = mailsByDate.map() { $0.mail }
+        mails = mailsByDate.map { $0.mail }
     }
 
 }
