@@ -4,24 +4,28 @@ class AppointmentGenerator {
 
     let startDate: Date
     let endDate: Date
+    let contacts: [Person]
+    let locale: Locale
 
     var appointmentDesciptions: [AppointmentTemplate]
 
     /// Returns a generator for the time frame -days from now until +days into the future
-    static func generator(days: Int, appointmentDesciptions: [AppointmentTemplate]) -> AppointmentGenerator {
+    static func generator(days: Int, appointmentDesciptions: [AppointmentTemplate], contacts: [Person], locale: Locale) -> AppointmentGenerator {
         let calendar = Calendar(identifier: .gregorian)
         let now = Date()
 
         let firstDay = calendar.date(byAdding: .day, value: -days, to: now)!
         let lastDay = calendar.date(byAdding: .day, value: days, to: now)!
 
-        return AppointmentGenerator(startDate: firstDay, endDate: lastDay, appointmentDesciptions: appointmentDesciptions)
+        return AppointmentGenerator(startDate: firstDay, endDate: lastDay, appointmentDesciptions: appointmentDesciptions, contacts: contacts, locale: locale)
     }
 
-    init(startDate: Date, endDate: Date, appointmentDesciptions: [AppointmentTemplate]) {
+    init(startDate: Date, endDate: Date, appointmentDesciptions: [AppointmentTemplate], contacts: [Person], locale: Locale) {
         self.startDate = startDate
         self.endDate = endDate
         self.appointmentDesciptions = appointmentDesciptions
+        self.contacts = contacts
+        self.locale = locale
     }
 
     func generateAppointments() -> [AppointmentRequest] {
@@ -60,17 +64,43 @@ class AppointmentGenerator {
 
             let time = template.typicalTimes.randomElement() ?? Time(hour: 9, minute: 0)
             guard let titleAndDescription = template.titlesAndDescriptions.randomElement() else { continue }
-            let title = titleAndDescription.title
-            let description = titleAndDescription.description
+            var title = titleAndDescription.title
+            var description = titleAndDescription.description
             let location = titleAndDescription.location
             let duration = titleAndDescription.durations.randomElement() ?? 30
 
             let startDate = calendar.date(bySettingHour: time.hour, minute: time.minute, second: 0, of: day)!
-            let request = AppointmentRequest.from(title: title, description: description, startDate: startDate, duration: duration, location: location, repeatRule: rrule)
 
             if rrule != nil {
                 templatesToRemove.append(template)
             }
+
+            let minGuests = titleAndDescription.minParticipants
+            let maxGuests = titleAndDescription.maxParticipants
+
+            var guests = [Person]()
+            if (minGuests != nil) || (maxGuests != nil) {
+                let range = (minGuests ?? 0)...(maxGuests ?? contacts.count)
+                var allContacts = contacts
+                for _ in range {
+                    guard let guest = allContacts.randomElementByRemoving() else { break }
+                    guests.append(guest)
+                }
+
+                if !guests.isEmpty {
+                    let firstNames: [String] = guests.map( { $0.firstName ?? $0.displayName } ).sorted { $0 < $1 }
+                    let listFormater = ListFormatter()
+                    listFormater.locale = locale
+                    let combinedNames = listFormater.string(from: firstNames)!
+                    
+                    title = title.replacingOccurrences(of: "{{NAME}}", with: combinedNames)
+                    if description != nil {
+                        description = description!.replacingOccurrences(of: "{{NAME}}", with: combinedNames)
+                    }
+                }
+            }
+
+            let request = AppointmentRequest.from(title: title, description: description, startDate: startDate, duration: duration, location: location, repeatRule: rrule, guests: guests)
 
             result.append(request)
         }

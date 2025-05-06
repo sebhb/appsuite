@@ -35,6 +35,12 @@ struct Person: Decodable, Encodable {
         return attendee
     }
 
+    var guest: Attendee {
+        let attendeeContact = AttendeeContact(first_name: computedFirstName, last_name: computedLastName, display_name: displayName)
+        let attendee = Attendee(cuType: "INDIVIDUAL", cn: displayName, partStat: "ACCEPTED", role: "REQ-PARTICIPANT", entity: nil, email: email1, uri: "mailto:\(email1)", contact: attendeeContact)
+        return attendee
+    }
+
     var organizer: Organizer {
         let organizerContact = OrganizerContact(first_name: computedFirstName, last_name: computedLastName, email1: email1)
         let organizer = Organizer(cn: displayName, email: email1, uri: "mailto:\(email1)", entity: userId, contact: organizerContact)
