@@ -16,12 +16,16 @@ struct TitleDescriptionLocation: Decodable, Equatable {
     /// One of these will be chosen by random. In order to increase the probability of a duration being chosen, add it more than once, e.g. [30, 30, 30, 60] gives a 75% chance of a duration 0f 30 minutes and a 25% chance of a duration of 60 minutes.
     /// Supply only one value to use a fixed value in any case.
     let durations: [Int]
+    let minParticipants: Int?
+    let maxParticipants: Int?
 
     static func == (lhs: TitleDescriptionLocation, rhs: TitleDescriptionLocation) -> Bool {
         return lhs.title == rhs.title
         && lhs.description == rhs.description
         && lhs.location == rhs.location
         && lhs.durations == rhs.durations
+        && lhs.minParticipants == rhs.minParticipants
+        && lhs.maxParticipants == rhs.maxParticipants
     }
 }
 

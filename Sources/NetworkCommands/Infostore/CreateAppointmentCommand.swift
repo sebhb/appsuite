@@ -16,7 +16,7 @@ class CreateAppointmentCommand: NetworkCommand<AppointmentCreationReply> {
     }
 
     override func requestParameters() -> [String : String] {
-        return ["action": "new", "expand": "true", "folder": appointment.folder, "session": remoteSession.session]
+        return ["action": "new", "expand": "true", "folder": appointment.folder, "scheduling": "none", "session": remoteSession.session]
     }
 
     override func oxFunction() -> String {

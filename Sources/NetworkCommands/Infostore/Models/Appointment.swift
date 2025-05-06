@@ -15,14 +15,15 @@ struct AppointmentRequest: Decodable {
     let endTime: String
     let location: String?
     let rrule: String? // Recurrence rules like "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR"; section 3.8.5.3 of https://www.rfc-editor.org/rfc/rfc5545.txt
+    let guests: [Person]
 
-    static func from(title: String, description: String? = nil, startDate: Date, duration: Int = 60, location: String? = nil, repeatRule: String? = nil) -> AppointmentRequest {
+    static func from(title: String, description: String? = nil, startDate: Date, duration: Int = 60, location: String? = nil, repeatRule: String? = nil, guests: [Person] = []) -> AppointmentRequest {
         let endDate = Calendar.current.date(byAdding: .minute, value: duration, to: startDate)
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyyMMdd'T'HHmmss"
         let startTime = dateFormatter.string(from: startDate)
         let endTime = dateFormatter.string(from: endDate!)
-        return AppointmentRequest(title: title, description: description, startTime: startTime, endTime: endTime, location: location, rrule: repeatRule)
+        return AppointmentRequest(title: title, description: description, startTime: startTime, endTime: endTime, location: location, rrule: repeatRule, guests: guests)
     }
 }
 
@@ -56,7 +57,7 @@ struct Attendee: Decodable, Encodable {
     let cn: String // Common Name
     let partStat: String // Participation Status
     let role: String? // CHAIR, REQ-PARTICIPANT, OPT-PARTICIPANT, NON-PARTICIPANT
-    let entity: Int // Internal User ID
+    let entity: Int? // Internal User ID
     let email: String?
     let uri: String?
     let contact: AttendeeContact?
@@ -82,9 +83,9 @@ struct Appointment: Decodable, Encodable {
         let end = DateTime(value: request.endTime, tzid: timezone)
 
         let organizer = person.organizer
-        let attendee = person.attendee
+        let attendees = [person.attendee] + request.guests.map { $0.guest }
 
-        let appointment = Appointment(folder: folderId, startDate: start, endDate: end, class: "PUBLIC", transp: "OPAQUE", organizer: organizer, attendees: [attendee], attendeePrivileges: "DEFAULT", summary: request.title, location: request.location, description: request.description, categories: nil)
+        let appointment = Appointment(folder: folderId, startDate: start, endDate: end, class: "PUBLIC", transp: "OPAQUE", organizer: organizer, attendees: attendees, attendeePrivileges: "DEFAULT", summary: request.title, location: request.location, description: request.description, categories: nil)
 
         return appointment
     }

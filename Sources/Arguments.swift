@@ -35,6 +35,9 @@ struct ImportMailOptions: ParsableArguments {
 struct GenerateAppointmentsOptions: ParsableArguments {
     @Option(name: [.customLong("days")], help: "The amount of days into the past and into the future to generate appointments")
     var days: Int = 185
+
+    @Option(name: [.customLong("locale")], help: "The locale used for concatenation of names in appointment titles")
+    var locale: String = "en_US"
 }
 
 struct GenerateContactsOptions: ParsableArguments {
