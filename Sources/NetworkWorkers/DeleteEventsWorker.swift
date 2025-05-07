@@ -2,10 +2,10 @@ import Foundation
 
 class DeleteEventsWorker: InfostoreBaseWorker {
 
-    func deleteEvents() async throws {
+    func deleteEvents(years: Int) async throws {
         try await login()
 
-        let getEventsCommand = GetEventsCommand(session: remoteSession)
+        let getEventsCommand = GetEventsCommand(session: remoteSession, years: years)
         guard let events = try await getEventsCommand.execute() else {
             print("Could not retrieve calendar events")
             return
