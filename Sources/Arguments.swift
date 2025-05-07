@@ -44,3 +44,8 @@ struct GenerateContactsOptions: ParsableArguments {
     @Option(name: [.customLong("numberOfContacts")], help: "The number of contacts to generate")
     var numberOfContacts: Int = 20
 }
+
+struct DeleteAppointmentsOptions: ParsableArguments {
+    @Option(name: [.customLong("years")], help: "The number of years into the past and into the future to delete")
+    var years: Int = 1
+}
