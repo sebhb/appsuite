@@ -14,7 +14,6 @@ struct ContactTemplate: Encodable, Decodable {
     let addresses: [ContactAddress]?
     let emailDomains: [String]?
     let probabilityOfAddress: Double?
-    let probabilityOfEmail: Double?
     let avatarsPath: String?
 }
 
@@ -24,7 +23,6 @@ class ContactTemplateWithAvatars {
     var addresses: [ContactAddress]
     let emailDomains: [String]
     let probabilityOfAddress: Double?
-    let probabilityOfEmail: Double?
     var avatarFilenames: [String]
 
     static func from(_ template: ContactTemplate, basePath: String) -> ContactTemplateWithAvatars {
@@ -38,17 +36,15 @@ class ContactTemplateWithAvatars {
             addresses: template.addresses ?? [],
             emailDomains: template.emailDomains ?? [],
             probabilityOfAddress: template.probabilityOfAddress,
-            probabilityOfEmail: template.probabilityOfEmail,
             avatarFilenames: avatarsPaths)
     }
 
-    init(firstNames: [String], lastNames: [String], addresses: [ContactAddress], emailDomains: [String], probabilityOfAddress: Double?, probabilityOfEmail: Double?, avatarFilenames: [String]) {
+    init(firstNames: [String], lastNames: [String], addresses: [ContactAddress], emailDomains: [String], probabilityOfAddress: Double?, avatarFilenames: [String]) {
         self.firstNames = firstNames
         self.lastNames = lastNames
         self.addresses = addresses
         self.emailDomains = emailDomains
         self.probabilityOfAddress = probabilityOfAddress
-        self.probabilityOfEmail = probabilityOfEmail
         self.avatarFilenames = avatarFilenames
     }
 

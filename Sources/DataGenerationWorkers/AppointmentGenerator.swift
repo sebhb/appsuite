@@ -82,7 +82,8 @@ class AppointmentGenerator {
             if (minGuests != nil) || (maxGuests != nil) {
                 let range = (minGuests ?? 0)...(maxGuests ?? contacts.count)
                 var allContacts = contacts
-                for _ in range {
+                let numberOfGuests = Int.random(in: range)
+                for _ in 0..<numberOfGuests {
                     guard let guest = allContacts.randomElementByRemoving() else { break }
                     guests.append(guest)
                 }
