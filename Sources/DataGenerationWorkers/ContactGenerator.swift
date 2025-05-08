@@ -35,11 +35,7 @@ class ContactGenerator {
             addressTemplate = template.address()
         }
 
-        var mailAddress: String?
-        let hasEmail = Double.random(in: 0..<1) < (template.probabilityOfEmail ?? 1.0)
-        if hasEmail {
-            mailAddress = generatePseudoMailAddress(firstName: firstName, lastName: lastName, domains: template.emailDomains)
-        }
+        let mailAddress = generatePseudoMailAddress(firstName: firstName, lastName: lastName, domains: template.emailDomains)
 
         var imageKind: ImageKind?
         var imageData: Data?

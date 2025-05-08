@@ -1,5 +1,5 @@
 # appsuite
-A simple command line tool for interaction with Open-Xchange's App Suite.
+A simple command line tool for interaction with [Open-Xchange's App Suite](https://www.open-xchange.com/products/ox-app-suite).
 
 ### Motivation
 
@@ -7,7 +7,7 @@ The main motivation for this tool is to be able to "fill" test accounts with dem
 
 ### Compatibility
 
-This tool is compatible with any App Suite 7.10.6 or higher regardless of location. No matter whether this is an cloud installation maintained by Open Xchange or a small custom installation, behind a VPN or not. As long as it is reachable, it can be filled with data.
+This tool is compatible with any App Suite 7.10.6 or higher regardless of location. No matter whether this is a cloud installation maintained by Open-Xchange or a small custom installation, behind a VPN or not. As long as it is reachable, it can be filled with data.
 
 ### Capabilities
 - Importing data
@@ -21,7 +21,7 @@ This tool is compatible with any App Suite 7.10.6 or higher regardless of locati
 
   - Files
 
-    Files can only be uploaded to the root level of the user's Drive directory.
+    Files can be uploaded to the root level of the user's Drive directory.
 
   - Tasks
 
@@ -43,7 +43,7 @@ This tool is compatible with any App Suite 7.10.6 or higher regardless of locati
 - Deleting data
   - Appointments
 
-    The purpose of this funcitonality is two fold, a) deleting lots of appointments can be tedious, b) the way this deletion is implemented, no emails are sent to participants.
+    The purpose of this funcitonality is two fold, a) deleting lots of appointments via the UI can be tedious, b) the way this deletion is implemented, no emails are sent to participants.
 
 ### Further help
 
@@ -51,4 +51,4 @@ Use `appsuite --help` for any subcommand. All custom JSON formates for data impo
 
 ### Why Swift
 
-Swift is a modern and robust programming language. Apple's [Argument Parser](https://github.com/apple/swift-argument-parser) is a powerful package for the processing of command line arguments.
+[Swift](https://www.swift.org) is a modern and robust programming language. Apple's [Argument Parser](https://github.com/apple/swift-argument-parser) is a powerful package for the processing of command line arguments.
