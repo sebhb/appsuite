@@ -12,22 +12,12 @@ extension String {
     }
 
     func removingLastPathComponent() -> String {
-#if os(Windows)
-        let pathSeparator = "\\"
-#else
-        let pathSeparator = "/"
-#endif
-        var pathcomponents = self.split(separator: pathSeparator)
+        var pathcomponents = self.split(separator: FileManager.systemPathSeparator)
         pathcomponents.removeLast()
-        return pathSeparator + pathcomponents.joined(separator: pathSeparator)
+        return FileManager.systemPathSeparator + pathcomponents.joined(separator: FileManager.systemPathSeparator)
     }
 
     func appendingPathComponent(_ pathComponent: String) -> String {
-#if os(Windows)
-        let pathSeparator = "\\"
-#else
-        let pathSeparator = "/"
-#endif
-        return self + (self.hasSuffix(pathSeparator) ? "" : pathSeparator) + pathComponent
+        return self + (self.hasSuffix(FileManager.systemPathSeparator) ? "" : FileManager.systemPathSeparator) + pathComponent
     }
 }

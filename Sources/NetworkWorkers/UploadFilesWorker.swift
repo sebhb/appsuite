@@ -13,7 +13,7 @@ class UploadFilesWorker: InfostoreBaseWorker {
                 print("Could not read file \(file) - This could be a directory. Skipping.")
                 continue
             }
-            let filename = file.components(separatedBy: "/").last!
+            let filename = file.components(separatedBy: FileManager.systemPathSeparator).last!
             let uploadFileCommand = UploadFileCommand(session: remoteSession, filename: filename, fileContents: fileContents, targetfolderId: driveRootFolder)
             print("Uploading \(filename)")
             guard let _ = try await uploadFileCommand.execute() else {
