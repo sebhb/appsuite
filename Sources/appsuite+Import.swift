@@ -17,7 +17,7 @@ extension Appsuite {
 
         mutating func run() async throws {
             do {
-                let files = try FileManager.default.contentsOfDirectory(atPath: pathOptions.path).filter { $0.hasSuffix(".eml") }.map { pathOptions.path + "/" + $0 }
+                let files = try FileManager.default.contentsOfDirectory(atPath: pathOptions.path).filter { $0.hasSuffix(".eml") }.map { pathOptions.path + FileManager.systemPathSeparator + $0 }
                 guard files.count > 0 else {
                     print(".eml files not found in \(pathOptions.path)")
                     return
@@ -74,7 +74,7 @@ extension Appsuite {
         mutating func run() async throws {
             let uploadFilesWorker = UploadFilesWorker(userCredentialsOptions: userCredentialsOptions)
             do {
-                let files = try FileManager.default.contentsOfDirectory(atPath: pathOptions.path).filter { !$0.hasPrefix(".") }.map { pathOptions.path + "/" + $0 }
+                let files = try FileManager.default.contentsOfDirectory(atPath: pathOptions.path).filter { !$0.hasPrefix(".") }.map { pathOptions.path + FileManager.systemPathSeparator + $0 }
                 guard files.count > 0 else {
                     print("No files not found in \(pathOptions.path)")
                     return
