@@ -1,0 +1,163 @@
+[
+	{
+		"titlesAndDescriptions": [
+			{
+				"title": "Doctor appointment",
+				"durations": [30]
+			}
+		],
+		"typicalTimes": [
+			{
+				"hour": 7,
+				"minute": 30
+			},
+			{
+				"hour": 8,
+				"minute": 0
+			}
+		],
+		"weekdays": [2, 3, 4, 5, 6],
+		"probabilityOfTakingPlace": 0.05
+	},
+	{
+		"titlesAndDescriptions": [
+			{
+				"title": "Prepare Team Call",
+				"durations": [15]
+			}
+		],
+		"typicalTimes": [
+			{
+				"hour": 10,
+				"minute": 30
+			}
+		],
+		"weekdays": [2, 3, 4, 5, 6],
+		"probabilityOfTakingPlace": 0.1
+	},
+	{
+		"titlesAndDescriptions": [
+			{
+				"title": "Team Call",
+				"description": "Daily Team Call",
+				"location": "Zoom Room",
+				"durations": [30]
+			}
+		],
+		"typicalTimes": [
+			{
+				"hour": 11,
+				"minute": 0
+			}
+		],
+		"weekdays": [2, 3, 4, 5, 6],
+		"probabilityOfTakingPlace": 1
+	},
+	{
+		"titlesAndDescriptions": [
+			{
+				"title": "Lunch with {{NAME}}",
+				"durations": [60],
+				"minParticipants": 1,
+				"maxParticipants": 2
+			}
+		],
+		"typicalTimes": [
+			{
+				"hour": 12,
+				"minute": 0
+			},
+						{
+				"hour": 12,
+				"minute": 30
+			},
+			{
+				"hour": 13,
+				"minute": 0
+			}
+
+		],
+		"weekdays": [2, 3, 4, 5, 6],
+		"probabilityOfTakingPlace": 0.25
+	},
+		{
+		"titlesAndDescriptions": [
+			{
+				"title": "1:1 with {{NAME}}",
+				"description": "Regular sync",
+				"location": "Zoom Room",
+				"durations": [30],
+				"minParticipants": 1,
+				"maxParticipants": 1
+			}
+		],
+		"typicalTimes": [
+			{
+				"hour": 13,
+				"minute": 0
+			}
+		],
+		"weekdays": [2],
+		"probabilityOfTakingPlace": 1
+	},
+	{
+		"titlesAndDescriptions": [
+			{
+				"title": "Gym",
+				"durations": [60]
+			}
+		],
+		"typicalTimes": [
+			{
+				"hour": 16,
+				"minute": 0
+			}
+		],
+		"weekdays": [3, 4],
+		"probabilityOfTakingPlace": 0.25
+	},
+	{
+		"titlesAndDescriptions": [
+			{
+				"title": "Webinar",
+				"location": "Zoom Room",
+				"durations": [30]
+			}
+		],
+		"typicalTimes": [
+			{
+				"hour": 14,
+				"minute": 0
+			}
+		],
+		"weekdays": [5, 6],
+		"probabilityOfTakingPlace": 1.0
+	},
+	{
+		"titlesAndDescriptions": [
+			{
+				"title": "Dinner with {{NAME}}",
+				"durations": [60],
+				"minParticipants": 1,
+				"maxParticipants": 1
+			}
+		],
+		"typicalTimes": [
+			{
+				"hour": 19,
+				"minute": 0
+			},
+						{
+				"hour": 19,
+				"minute": 30
+			},
+			{
+				"hour": 20,
+				"minute": 0
+			}
+
+		],
+		"weekdays": [2, 3, 4, 5, 6],
+		"probabilityOfTakingPlace": 0.25
+	}
+]
