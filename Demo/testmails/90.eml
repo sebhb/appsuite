@@ -1,0 +1,376 @@
+Return-Path: <eva.may.999877602@demo.ox.io>
+Received: from io2.ox.io ([unix socket])
+	 by io2 (Cyrus v2.2.13-Debian-2.2.13-19+squeeze3) with LMTPA;
+	 Sat, 20 Apr 2013 14:41:38 +0200
+X-Sieve: CMU Sieve 2.2
+Received: from demo.ox.io (demo.ox.io [80.237.131.218])
+	by io2.ox.io (Postfix) with ESMTP id 152721E7B6
+	for <chris.davis.999877602@demo.ox.io>; Sat, 20 Apr 2013 14:41:38 +0200 (CEST)
+Date: Sat, 20 Apr 2013 14:41:37 +0200 (CEST)
+From: "May, Eva" <eva.may.999877602@demo.ox.io>
+Reply-To: "May, Eva" <eva.may.999877602@demo.ox.io>
+To: "Davis, Chris" <chris.davis.999877602@demo.ox.io>
+Message-ID: <68995534.423.1366461697169.open-xchange@demo.ox.io>
+Subject: Neuer Termin: Team Update Call
+MIME-Version: 1.0
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_421_2050519478.1366461697146"
+X-Priority: 3 (normal)
+X-Mailer: Open-Xchange Mailer v7.2.0-Rev4
+X-OX-Reminder: 18,33,1
+X-Open-Xchange-Module: Appointments
+X-Open-Xchange-Type: New
+X-Open-Xchange-Object: 18
+X-Open-Xchange-UID: a7c03690-7f82-45b7-8109-5ee9dfb37d5c
+X-OX-Marker: a0d9d762-8a4a-483a-a63e-7a12afce4607
+
+------=_Part_421_2050519478.1366461697146
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Sie wurden von May, Eva zu einem Ereignis eingeladen:
+
+
+
+=3D=3D=3D=3D[       Team Update Call       ]=3D=3D=3D=3D
+
+Alle Zeiten werden in dieser Zeitzone angezeigt: Mitteleurop=C3=A4ische Zei=
+t
+
+Wann: Dienstag, 2. April 2013 - Jede Woche am Dienstag, Kein Enddatum 14:00=
+ - 15:00
+Wo: Canf Call
+
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+For now lets get together every week and talk about the topics we are plann=
+ing to deliver.
+
+I will ask you to provide the following:
+
+1) Last weeks topics
+2) Next weeks planned topics
+3) Help you will need
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+=3D=3D Teilnehmer =3D=3D
+
+Bush, Anna (Wartestatus)
+Davis, Chris (Wartestatus)
+May, Eva (best=C3=A4tigt)
+
+=3D=3D Ressourcen =3D=3D
+
+
+=3D=3D Details: =3D=3D
+
+Anzeigen als: Gebucht
+Angelegt: Samstag, 20. April 2013 14:41 - May, Eva
+
+http://7edp.ox.io/#m=3Dcalendar&i=3D18&f=3D33
+
+
+
+
+
+
+------=_Part_421_2050519478.1366461697146
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org=
+/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns=3D"http://www.w3.org/1999/xht=
+ml"><head>
+    <meta content=3D"text/html; charset=3DUTF-8" http-equiv=3D"Content-Type=
+"/>
+ <title></title><meta charset=3D"UTF-8"/><style type=3D"text/css">
+            .content {
+ white-space: normal;
+ color: black;
+ font-family: Arial, Helvetica, sans-serif;
+ font-size: 12px;
+ cursor: default;
+}
+/* shown_as */
+
+
+.shown_as.reserved { background-color: #08c; } /* blue */
+.shown_as.temporary { background-color: #fc0; } /* yellow */
+.shown_as.absent { background-color: #913F3F; } /* red */
+.shown_as.free { background-color: #8EB360; } /* green */
+
+.shown_as_label.reserved { color: #08c; } /* blue */
+.shown_as_label.temporary { color: #fc0; } /* yellow */
+.shown_as_label.absent { color: #913F3F; } /* red */
+.shown_as_label.free { color: #8EB360; } /* green */
+
+em {
+ font-weight: bold;
+}
+
+/* Detail view */
+
+.timezone {
+ margin-bottom: 2em;
+}
+
+.justification, .attachmentNote {
+ margin-top: 2em;
+ margin-bottom: 2em;
+}
+
+.calendar-detail .action {
+ float: right;
+ margin-right: 1em;
+}
+
+.calendar-detail .link {
+ cursor: pointer;
+ text-decoration: underline;
+ color: #00a0cd;
+}
+
+.calendar-detail .calendar-buttons {
+ height: 2em;
+ text-align: right;
+ line-height: 2em;
+ border-bottom: 1px solid #f0f0f0;
+}
+
+.calendar-detail .date {
+    font-size: 11pt;
+    color: #ccc;
+}
+
+.calendar-detail .interval {
+    color: #555;
+    white-space: nowrap;
+    float: right;
+}
+
+.calendar-detail .day {
+    color: #888;
+}
+
+.calendar-detail .title {
+    font-size: 18pt;
+    line-height: 22pt;
+    margin: 0.25em 0 0.25em 0;
+}
+
+.calendar-detail .location {
+    font-size: 11pt;
+    color: #888;
+    margin-bottom: 1em;
+}
+
+.calendar-detail .label {
+    font-size: 9pt;
+    color: #888;
+    clear: both;
+    border-bottom: 1px solid #ccc;
+    padding: 1em 0 0.25em 0em;
+    margin-bottom: 0.5em;
+}
+
+.calendar-detail .note {
+    max-width: 550px;
+    margin: 2em 0 1em 0;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+    cursor: text;
+}
+
+.calendar-detail .participants {
+    min-height: 2em;
+}
+
+.calendar-detail .participants table {
+    text-align: left;
+    vertical-align: left;
+}
+
+.calendar-detail .participant {
+    line-height: 1.2 em;
+}
+
+.calendar-detail .detail-label {
+    display: inline-block;
+    width: 80px;
+    white-space: nowrap;
+    color: #666;
+}
+
+.calendar-detail .detail {
+    white-space: nowrap;
+}
+
+.calendar-detail .detail.shown_as {
+    display: inline-block;
+    height: 1em;
+    width: 1em;
+}
+
+.calendar-detail .participant .status { font-weight: bold; }
+.calendar-detail .participant .status.accepted { color: #8EB360; } /* green=
+ */
+.calendar-detail .participant .status.declined { color: #913F3F; } /* red *=
+/
+.calendar-detail .participant .status.tentative { color: #c80; } /* orange =
+*/
+
+.calendar-detail .participant .comment {
+    color: #888;
+    display: block;
+    white-space: normal;
+    padding-left: 1em;
+}
+
+.calendar-detail .group {
+    margin: 0.75em 0 0.25em 0;
+    color: #333;
+}
+
+.person, .person-link {
+ color: #00A0CD;
+}
+
+.clear-title {
+ font-family: OpenSans, Helvetica, Arial, sans-serif;
+ font-weight: 200;
+ font-size: 20pt;
+ line-height: 1.15em;
+}
+
+.calendar-action {
+ margin-bottom: 2em;
+ font-family: OpenSans, Helvetica, Arial, sans-serif;
+ font-weight: 200;
+ font-size: 12pt;
+}
+
+.calendar-action .changes{
+    margin-top: 2em;
+ font-size: 11pt;
+}
+
+.calendar-action .changes .original {
+    font-weight: bold;
+}
+
+.calendar-action .changes .recurrencePosition {
+    font-weight: bold;
+}
+
+.calendar-action .changes .updated {
+    color: green;
+    font-weight: bold;
+}
+
+.calendar-action .status {  }
+.calendar-action  .status.accepted { color: #8EB360; } /* green */
+.calendar-action  .status.declined { color: #913F3F; } /* red */
+.calendar-action  .status.tentative { color: #c80; } /* orange */
+
+        </style></head><body>
+ =20
+  =20
+  =20
+  =20
+ =20
+ =20
+  <div class=3D"content">=20
+   <div class=3D"timezone">
+     Alle Zeiten werden in dieser Zeitzone angezeigt:=20
+    <em>Mitteleurop&#228;ische Zeit</em>=20
+   </div>=20
+   <div class=3D"calendar-action">
+    Sie wurden von=20
+    <span class=3D"person">May, Eva</span> zu einem Ereignis eingeladen:
+   </div>=20
+   <div class=3D"calendar-detail">=20
+    <div class=3D"date">=20
+     <div class=3D"interval">
+       14:00 - 15:00=20
+     </div>=20
+     <div class=3D"day">
+       Dienstag, 2. April 2013 - Jede Woche am Dienstag, Kein Enddatum=20
+     </div>=20
+    </div>=20
+    <div class=3D"title clear-title">
+      Team Update Call=20
+    </div>=20
+    <div class=3D"location">
+      Canf Call=20
+    </div>=20
+    <div style=3D"display:none" class=3D"calendar-buttons"></div>=20
+    <div class=3D"note">
+      For now lets get together every week and talk about the topics we are=
+ planning to deliver.
+     <br/>
+     <br/>I will ask you to provide the following:
+     <br/>
+     <br/>1) Last weeks topics
+     <br/>2) Next weeks planned topics
+     <br/>3) Help you will need=20
+    </div>=20
+    <div class=3D"participants">=20
+     <div class=3D"label">
+       Teilnehmer=20
+     </div>=20
+     <div class=3D"participant-list">=20
+      <div class=3D"participant">=20
+       <span class=3D"person">Bush, Anna</span>=20
+       <span class=3D"comment"></span>=20
+      </div>=20
+      <div class=3D"participant">=20
+       <span class=3D"person">Davis, Chris</span>=20
+       <span class=3D"comment"></span>=20
+      </div>=20
+      <div class=3D"participant">=20
+       <span class=3D"person">May, Eva</span>=20
+       <span class=3D"status accepted">=E2=9C=93</span>=20
+       <span class=3D"comment"></span>=20
+      </div>=20
+     </div>=20
+     <div class=3D"participants-clear"></div>=20
+    </div>=20
+    <div class=3D"participants">=20
+     <div class=3D"label">
+       Ressourcen=20
+     </div>=20
+     <div class=3D"participant-list">=20
+     </div>=20
+     <div class=3D"participants-clear"></div>=20
+    </div>=20
+    <div>=20
+     <div class=3D"label">
+       Details:=20
+     </div>
+     <span class=3D"detail-label">Anzeigen als:&#160;</span>
+     <span class=3D"detail"><span class=3D"shown_as_label reserved">Gebucht=
+</span></span>
+     <br/>=20
+     <span class=3D"detail-label">Angelegt:&#160;</span>
+     <span class=3D"detail"><span>Samstag, 20. April 2013 14:41</span> <spa=
+n>-</span> <span>May, Eva</span></span>=20
+     <br/>=20
+     <span class=3D"detail-label">Direkter Link:&#160;</span>
+     <span class=3D"detail"><a href=3D"http://7edp.ox.io/#m=3Dcalendar&i=3D=
+18&f=3D33">http://7edp.ox.io/#m=3Dcalendar&#38;i=3D18&#38;f=3D33</a> <span>=
+</span> </span>
+    </div>=20
+    <div class=3D"attachmentNote">=20
+    </div>=20
+    <div class=3D"justification">=20
+    </div>=20
+   </div>=20
+  </div>  =20
+=20
+</body></html>
+------=_Part_421_2050519478.1366461697146--
