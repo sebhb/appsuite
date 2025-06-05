@@ -1,0 +1,54 @@
+Return-Path: <david.smith.999877602@demo.ox.io>
+Received: from demo.ox.io ([unix socket])
+	 by demo (Cyrus v2.2.13-Debian-2.2.13-19+squeeze3) with LMTPA;
+	 Tue, 08 Jan 2013 13:34:47 +0100
+X-Sieve: CMU Sieve 2.2
+Received: from 7edp.ox.io (localhost [127.0.0.1])
+	by demo.ox.io (Postfix) with ESMTP id 860435E38C
+	for <anna.bush.999877602@demo.ox.io>; Tue,  8 Jan 2013 13:34:47 +0100 (CET)
+Date: Tue, 8 Jan 2013 13:34:47 +0100 (CET)
+From: "Smith, David" <david.smith.999877602@demo.ox.io>
+Reply-To: "Smith, David" <david.smith.999877602@demo.ox.io>
+To: anna.bush.999877602@demo.ox.io
+Message-ID: <1094926310.233.1357648487548.open-xchange@7edp.ox.io>
+Subject: New task: Create Product Concept Document
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3 (normal)
+X-Mailer: Open-Xchange Mailer v7.0.0-Rev3
+X-OX-Reminder: 1,39,4
+X-Open-Xchange-Module: Tasks
+X-Open-Xchange-Type: New
+X-Open-Xchange-Object: 1
+X-OX-Marker: d5e7dce5-b7cb-4d96-99f4-1ef16d8cbd8d
+
+
+A new task was created by Smith, David.
+You can check this task in your tasks:
+http://7edp.ox.io/#m=task&i=1&f=39
+
+Task
+====
+Created by: Smith, David
+Created at: Tuesday, Jan 8, 2013 1:34:00 PM, CET
+Description: Create Product Concept Document
+Folder: Tasks
+Priority: Normal
+Status: In progress (25%)
+
+Start date: Jan 1, 2013
+Due date: Apr 18, 2013
+
+
+Participants
+============
+Bush, Anna (waiting)
+Jones, Paul (waiting)
+May, Eva (waiting)
+
+Resources
+=========
+No resources have been scheduled.
+
+========================================== 

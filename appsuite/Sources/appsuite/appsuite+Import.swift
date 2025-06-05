@@ -8,29 +8,95 @@ extension Appsuite {
     }
 
     struct ImportMails: AsyncParsableCommand {
-        static let configuration = CommandConfiguration(commandName: "mails", abstract: "Upload an email for a user.", discussion: "Uploads all eml files in `source` to the specified user's inbox. This command does not validate whether there is enough quoata available.")
+        static let configuration = CommandConfiguration(commandName: "mails", abstract: "Upload emails for a user.", discussion: """
+            Uploads all eml files in `source` to the specified user's inbox. This command does not validate whether there is enough quoata available.
+            If the --importFolderTree option is specified, the sourcePath is expected to point to the root of a structure like this
+            
+            ─── sourcePath
+                ├── Drafts
+                ├── DUMPSTER
+                ├── INBOX
+                │   ├── 70.eml
+                │   └── 75.eml
+                ├── Sent
+                ├── Sent Items
+                │   ├── 3.eml
+                │   └── 4.eml
+                ├── Spam
+                └── Trash
+            
+            to upload emails to different target folders at once.
+            Should importFolderTree be set, the targetFolderName option gets ignored and createTargetFolderIfNecessary is automatically set. 
+            """)
 
         @OptionGroup var userCredentialsOptions: UserCredentialsOptions
         @OptionGroup var pathOptions: ImportPathOptions
         @OptionGroup var importMailOptions: ImportMailOptions
         @OptionGroup var importStretchOptions: ImportStretchOptions
+        @OptionGroup var importFolderTree: ImportFolderTreeOption
+        @OptionGroup var createTargetFolderIfNecessary: GenerateTargetFolderOption
 
         mutating func run() async throws {
             do {
                 let path = pathOptions.resolvedPath
+                let mailUploads: [MailUpload]
 
-                let files = try FileManager.default.contentsOfDirectory(atPath: path).filter { $0.hasSuffix(".eml") }.map { path.appendingPathComponent($0) }
-                guard files.count > 0 else {
-                    print(".eml files not found in \(path)")
-                    return
+                if importFolderTree.importFolderTree {
+                    mailUploads = try mailUploadsForTree(at: path)
+                }
+                else {
+                    guard let files = try emlPaths(at: path) else {
+                        return
+                    }
+                    mailUploads = [MailUpload(targetFolderName: importMailOptions.targetFolderName, mailPaths: files)]
                 }
 
+                let ensureTargetFolderExists = importFolderTree.importFolderTree ? true : createTargetFolderIfNecessary.createTargetFolderIfNecessary
                 let uploadMailsWorker = UploadMailsWorker(userCredentialsOptions: userCredentialsOptions, adjustrecipient: importMailOptions.adjustRecipient, stretchPeriod: importStretchOptions.stretchPeriod)
-                try await uploadMailsWorker.uploadMails(paths: files)
+                try await uploadMailsWorker.prepare()
+                
+                for upload in mailUploads {
+                    let folder = upload.targetFolderName
+                    let files = upload.mailPaths
+                    if ensureTargetFolderExists {
+                        // TODO: pass on name returned by server!
+                        _ = try await uploadMailsWorker.ensureTargetFolderExists(folder)
+                    }
+                    try await uploadMailsWorker.uploadMails(paths: files, to: folder)
+                }
+                try await uploadMailsWorker.logout()
             }
             catch {
                 print("An error occurred: \(error)")
             }
+        }
+
+        struct MailUpload {
+            let targetFolderName: String
+            let mailPaths: [String]
+        }
+
+        func emlPaths(at path: String) throws -> [String]? {
+            let files = try FileManager.default.contentsOfDirectory(atPath: path).filter { $0.hasSuffix(".eml") }.map { path.appendingPathComponent($0) }
+            guard files.count > 0 else {
+                print(".eml files not found in \(path)")
+                return nil
+            }
+            return files
+        }
+
+        func mailUploadsForTree(at rootPath: String) throws -> [MailUpload] {
+            var result = [MailUpload]()
+
+            let targetFolders = try FileManager.default.contentsOfDirectory(atPath: rootPath).filter { !$0.hasPrefix(".") }
+            for folder in targetFolders {
+                let basePath = rootPath.appendingPathComponent(folder)
+                if let mailsPaths = try emlPaths(at: basePath) {
+                    result.append(MailUpload(targetFolderName: folder, mailPaths: mailsPaths))
+                }
+            }
+
+            return result
         }
     }
 

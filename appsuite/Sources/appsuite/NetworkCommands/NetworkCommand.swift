@@ -44,6 +44,10 @@ class NetworkCommand<T: Decodable>: NSObject {
         return "application/json"
     }
 
+    func validatesForServerErrors() -> Bool {
+        true
+    }
+
     func execute() async throws -> T? {
         let function = oxFunction()
         let parameters = requestParameters()
@@ -110,8 +114,10 @@ class NetworkCommand<T: Decodable>: NSObject {
 
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        if let error = try? decoder.decode(ServerError?.self, from: data) {
-            throw error
+        if validatesForServerErrors() {
+            if let error = try? decoder.decode(ServerError?.self, from: data) {
+                throw error
+            }
         }
 
         return try result(from: data)

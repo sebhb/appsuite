@@ -1,0 +1,79 @@
+Return-Path: <mike.ganson@open-xchange.com>
+Received: from io2.ox.io ([unix socket])
+	 by io2 (Cyrus v2.4.16-Debian-2.4.16-4+deb7u1) with LMTPA;
+	 Mon, 09 Jun 2014 16:01:49 +0200
+X-Sieve: CMU Sieve 2.4
+Received: from mx1.open-xchange.com (alcatraz.open-xchange.com [217.6.212.138])
+	by io2.ox.io (Postfix) with ESMTP id B078C3982FC;
+	Mon,  9 Jun 2014 16:01:49 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by mx1.open-xchange.com (Postfix) with ESMTP id D5E7828018;
+	Mon,  9 Jun 2014 16:03:23 +0200 (CEST)
+Received: from [127.0.0.1] (helo=mx1.open-xchange.com)
+	by localhost with ESMTP (eXpurgate 4.0.2)
+	(envelope-from <mike.ganson@open-xchange.com>)
+	id 5395beab-0b2f-7f000001272a-7f000001cc13-1
+	for <multiple-recipients>; Mon, 09 Jun 2014 16:03:23 +0200
+Received: from imap.open-xchange.com (imap.open-xchange.com [10.20.30.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(Client did not present a certificate)
+	by mx1.open-xchange.com (Postfix) with ESMTPS id BE5EC2800F;
+	Mon,  9 Jun 2014 16:03:23 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by imap.open-xchange.com (Postfix) with ESMTP id 8004228061A;
+	Mon,  9 Jun 2014 16:03:32 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at imap.open-xchange.com
+Received: from imap.open-xchange.com ([127.0.0.1])
+	by localhost (imap.open-xchange.com [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ilA9i4OpGSIL; Mon,  9 Jun 2014 16:03:32 +0200 (CEST)
+Received: from appsuite-dev-gw1.open-xchange.com (appsuite-dev-gw1.open-xchange.com [10.20.30.221])
+	(using TLSv1 with cipher ECDHE-RSA-AES128-SHA (128/128 bits))
+	(Client did not present a certificate)
+	by imap.open-xchange.com (Postfix) with ESMTPSA id 64941280556;
+	Mon,  9 Jun 2014 16:03:32 +0200 (CEST)
+Date: Mon, 9 Jun 2014 16:03:23 +0200 (CEST)
+From: "Ganson, Mike" <mike.ganson@open-xchange.com>
+Reply-To: "Ganson, Mike" <mike.ganson@open-xchange.com>
+To: "david.smith.999877602" <david.smith.999877602@demo.ox.io>
+Cc: "eva.may.999877602" <eva.may.999877602@demo.ox.io>
+Message-ID: <101085499.119.1402322603208.JavaMail.open-xchange@appsuite-dev-gw1.open-xchange.com>
+Subject: Update
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Priority: 3
+Importance: Medium
+X-Mailer: Open-Xchange Mailer v7.6.0-Rev4
+X-Originating-Client: open-xchange-appsuite
+X-purgate-ID: 151428::1402322603-00000B2F-2E97262D/0/0
+X-purgate-type: clean
+X-purgate-size: 1056
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-Notice: Whitelisted
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
+X-OX-Marker: 28b3b264-8b63-4f2c-91ca-e0dc41238f7f
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org=
+/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns=3D"http://www.w3.org/1999/xht=
+ml"><head>
+    <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF-8=
+" />
+=20
+ </head><body>
+=20
+  <p>David,</p>
+  <p>This is just to tell you that the Demo system is now up and running.</=
+p>
+  <p>Have fun with it.</p>
+  <p class=3D"io-ox-signature">Mike T Ganson<br /><br />Product Marketing<b=
+r /><br />http://vimeo.com/75766174<br />__________________________________=
+__________________________=E2=80=8B__________<br /><br />Mobile: + 49 (0) 1=
+70 571 38 65<br />_________________________________________________________=
+___=E2=80=8B__________<br />Open-Xchange AG, Rollnerstr. 14, 90408 N&#252;r=
+nberg, Amtsgericht N&#252;rnberg HRB 24738 <br />Vorstand: Rafael Laguna de=
+ la Vera, Carsten Dirks, Aufsichtsratsvorsitzender: Richard Seibt<br />____=
+________________________________________________________=E2=80=8B__________=
+</p>
+=20
+</body></html>

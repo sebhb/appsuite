@@ -1,0 +1,347 @@
+Return-Path: <chris.davis.999877602@demo.ox.io>
+Received: from io2.ox.io ([unix socket])
+	 by io2 (Cyrus v2.4.16-Debian-2.4.16-4+deb7u2) with LMTPA;
+	 Thu, 30 Apr 2015 00:53:24 +0200
+X-Sieve: CMU Sieve 2.4
+Received: from 2fc87886e768 (core3.ox.io [91.250.104.94])
+	by io2.ox.io (Postfix) with ESMTP id 010B5394002
+	for <anna.bush.999877602@demo.ox.io>; Thu, 30 Apr 2015 00:53:24 +0200 (CEST)
+Date: Thu, 30 Apr 2015 00:55:31 +0200 (CEST)
+From: "Davis, Chris" <chris.davis.999877602@demo.ox.io>
+Reply-To: "Davis, Chris" <chris.davis.999877602@demo.ox.io>
+To: "Bush, Anna" <anna.bush.999877602@demo.ox.io>
+Message-ID: <565148761.21.1430348131161.JavaMail.open-xchange@2fc87886e768>
+Subject: Davis, Chris accepted the invitation: Lisa: Soccer Training (MUM
+ drives)
+MIME-Version: 1.0
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_20_1651557923.1430348131159"
+X-Priority: 3 (normal)
+X-Mailer: Open-Xchange Mailer v7.6.2-Rev14
+X-OX-Reminder: 56,37,1
+X-Open-Xchange-Module: Appointments
+X-Open-Xchange-Type: Accepted
+X-Open-Xchange-Object: 56
+X-Open-Xchange-UID: 19f158fc-f424-4e49-b7e2-1859d4ef6e85
+Auto-Submitted: auto-generated
+X-Originating-Client: open-xchange-appsuite
+X-OX-Marker: 124b3441-3c18-4ca1-8d29-8f5907832163
+
+------=_Part_20_1651557923.1430348131159
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+Davis, Chris has accepted the invitation:
+
+
+
+====[       Lisa: Soccer Training (MUM drives)       ]====
+
+All times will be shown in the timezone Central European Time
+
+When: Thursday, April 30, 2015 - Every week on Thursday, No end 5:00 PM - 7:00 PM
+Where: @ School
+
+
+
+== Participants: ==
+
+Bush, Anna (accepted)
+Davis, Chris (accepted)
+lisa.smithy.ox@gmail.com (waiting)
+
+== Resources ==
+
+
+== Details: ==
+
+Show as: Temporary
+Created: Thursday, April 30, 2015 12:35 AM - Bush, Anna
+
+https://2fc87886e768/#m=calendar&i=56&f=37
+
+
+
+You have received this E-Mail because you are the organizer of this appointment.
+
+
+------=_Part_20_1651557923.1430348131159
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+ 
+        <title></title>
+        <meta charset="UTF-8">
+        <style type="text/css">
+            .content {
+ white-space: normal;
+ color: black;
+ font-family: Arial, Helvetica, sans-serif;
+ font-size: 12px;
+ cursor: default;
+}
+/* shown_as */
+
+
+.shown_as.reserved { background-color: #08c; } /* blue */
+.shown_as.temporary { background-color: #fc0; } /* yellow */
+.shown_as.absent { background-color: #913F3F; } /* red */
+.shown_as.free { background-color: #8EB360; } /* green */
+
+.shown_as_label.reserved { color: #08c; } /* blue */
+.shown_as_label.temporary { color: #fc0; } /* yellow */
+.shown_as_label.absent { color: #913F3F; } /* red */
+.shown_as_label.free { color: #8EB360; } /* green */
+
+em {
+ font-weight: bold;
+}
+
+/* Detail view */
+
+.timezone {
+ margin-bottom: 2em;
+}
+
+.justification, .attachmentNote {
+ margin-top: 2em;
+ margin-bottom: 2em;
+}
+
+.calendar-detail .action {
+ float: right;
+ margin-right: 1em;
+}
+
+.calendar-detail .link {
+ cursor: pointer;
+ text-decoration: underline;
+ color: #00a0cd;
+}
+
+.calendar-detail .calendar-buttons {
+ height: 2em;
+ text-align: right;
+ line-height: 2em;
+ border-bottom: 1px solid #f0f0f0;
+}
+
+.calendar-detail .date {
+    font-size: 11pt;
+    color: #ccc;
+}
+
+.calendar-detail .interval {
+    color: #555;
+    white-space: nowrap;
+    float: right;
+}
+
+.calendar-detail .day {
+    color: #888;
+}
+
+.calendar-detail .title {
+    font-size: 18pt;
+    line-height: 22pt;
+    margin: 0.25em 0 0.25em 0;
+}
+
+.calendar-detail .location {
+    font-size: 11pt;
+    color: #888;
+    margin-bottom: 1em;
+}
+
+.calendar-detail .label {
+    font-size: 9pt;
+    color: #888;
+    clear: both;
+    border-bottom: 1px solid #ccc;
+    padding: 1em 0 0.25em 0em;
+    margin-bottom: 0.5em;
+}
+
+.calendar-detail .note {
+    max-width: 550px;
+    margin: 2em 0 1em 0;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+    cursor: text;
+}
+
+.calendar-detail .participants {
+    min-height: 2em;
+}
+
+.calendar-detail .participants table {
+    text-align: left;
+    vertical-align: left;
+}
+
+.calendar-detail .participant {
+    line-height: 1.2 em;
+}
+
+.calendar-detail .detail-label {
+    display: inline-block;
+    width: 110px;
+    white-space: nowrap;
+    color: #666;
+}
+
+.calendar-detail .detail {
+    white-space: nowrap;
+}
+
+.calendar-detail .detail.shown_as {
+    display: inline-block;
+    height: 1em;
+    width: 1em;
+}
+
+.calendar-detail .participant .status { font-weight: bold; }
+.calendar-detail .participant .status.accepted { color: #8EB360; } /* green */
+.calendar-detail .participant .status.declined { color: #913F3F; } /* red */
+.calendar-detail .participant .status.tentative { color: #c80; } /* orange */
+
+.calendar-detail .participant .comment {
+    color: #888;
+    display: block;
+    white-space: normal;
+    padding-left: 1em;
+}
+
+.calendar-detail .group {
+    margin: 0.75em 0 0.25em 0;
+    color: #333;
+}
+
+.person, .person-link {
+ color: #00A0CD;
+}
+
+.clear-title {
+ font-family: OpenSans, Helvetica, Arial, sans-serif;
+ font-weight: 200;
+ font-size: 20pt;
+ line-height: 1.15em;
+}
+
+.calendar-action {
+ margin-bottom: 2em;
+ font-family: OpenSans, Helvetica, Arial, sans-serif;
+ font-weight: 200;
+ font-size: 12pt;
+}
+
+.calendar-action .changes{
+    margin-top: 2em;
+ font-size: 11pt;
+}
+
+.calendar-action .changes .original {
+    font-weight: bold;
+}
+
+.calendar-action .changes .recurrencePosition {
+    font-weight: bold;
+}
+
+.calendar-action .changes .updated {
+    color: green;
+    font-weight: bold;
+}
+
+.calendar-action .status {  }
+.calendar-action  .status.accepted { color: #8EB360; } /* green */
+.calendar-action  .status.declined { color: #913F3F; } /* red */
+.calendar-action  .status.tentative { color: #c80; } /* orange */
+
+        </style>
+    
+    </head><body>
+    
+        <div class="content">
+            <div class="timezone">
+ All times will be shown in the timezone <em>Central European Time</em>
+</div>
+
+            <div class="calendar-action"><span class="person">Davis, Chris</span> has <span class="status accepted">accepted</span> the invitation:</div>
+            <div class="calendar-detail">
+    <div class="date">
+        <div class="interval">
+            5:00 PM - 7:00 PM
+        </div>
+        <div class="day">
+            Thursday, April 30, 2015 - Every week on Thursday, No end
+        </div>
+    </div>
+    <div class="title clear-title">
+        Lisa: Soccer Training (MUM drives)
+    </div>
+    <div class="location">
+        @ School
+    </div>
+ <div class="calendar-buttons" style="display:none"></div>
+    <div class="note">
+        
+    </div>
+    <div class="participants">
+        <div class="label">
+            Participants:
+        </div>
+        <div class="participant-list">
+            <div class="participant">
+                <span class="person">Bush, Anna</span>
+                    <span class="status accepted">&#10003;</span>
+                <span class="comment"></span>
+            </div>
+            <div class="participant">
+                <span class="person">Davis, Chris</span>
+                    <span class="status accepted">&#10003;</span>
+                <span class="comment"></span>
+            </div>
+            <div class="participant">
+                <span class="person">lisa.smithy.ox@gmail.com</span>
+                <span class="comment"></span>
+            </div>
+        </div>
+        <div class="participants-clear"></div>
+    </div>
+    <div class="participants">
+        <div class="label">
+            Resources
+        </div>
+        <div class="participant-list">
+        </div>
+        <div class="participants-clear"></div>
+    </div>
+    <div>
+        <div class="label">
+            Details:
+        </div><span class="detail-label">Show as:&#160;</span><span class="detail"><span class="shown_as_label temporary">Temporary</span></span><br>
+        <span class="detail-label">Created:&#160;</span><span class="detail"><span>Thursday, April 30, 2015 12:35 AM</span> <span>-</span> <span>Bush, Anna</span></span>
+   <br>
+         <span class="detail-label">Direct link:&#160;</span><span class="detail"><a href="https://2fc87886e768/#m=calendar&amp;i=56&amp;f=37">https://2fc87886e768/#m=calendar&#38;i=56&#38;f=37</a> <span></span>
+
+    </span></div>
+ <div class="attachmentNote">
+  
+ </div>
+ <div class="justification">
+  You have received this E-Mail because you are the organizer of this appointment.
+ </div>
+</div>
+
+        </div>
+    
+</body></html>
+------=_Part_20_1651557923.1430348131159--

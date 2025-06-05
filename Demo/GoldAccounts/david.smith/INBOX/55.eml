@@ -1,0 +1,33 @@
+Return-Path: <eva.may.999877602@demo.ox.io>
+Received: from io2.ox.io ([unix socket])
+	 by io2 (Cyrus v2.2.13-Debian-2.2.13-19+squeeze3) with LMTPA;
+	 Thu, 25 Apr 2013 13:49:48 +0200
+X-Sieve: CMU Sieve 2.2
+Received: from demo.ox.io (demo.ox.io [80.237.131.218])
+	by io2.ox.io (Postfix) with ESMTP id A0B431E7EB
+	for <david.smith.999877602@demo.ox.io>; Thu, 25 Apr 2013 13:49:48 +0200 (CEST)
+Date: Thu, 25 Apr 2013 13:49:47 +0200 (CEST)
+From: "May, Eva" <eva.may.999877602@demo.ox.io>
+Reply-To: "May, Eva" <eva.may.999877602@demo.ox.io>
+To: "Smith, David" <david.smith.999877602@demo.ox.io>
+Message-ID: <396346696.69.1366890587740.open-xchange@demo.ox.io>
+Subject: Good photo from agency..
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+Importance: Medium
+X-Mailer: Open-Xchange Mailer v7.2.1-Rev1
+X-OX-Marker: b5295196-56dc-4a88-b11b-a670f6642ed2
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+ </head><body>
+ 
+ 
+  <p>David,</p>
+  <p>I love this can we use this photo somewhere?</p>
+  <p>File: Bike 1.jpg Direct link: <a href="https://demo.ox.io/appsuite/#!&app=io.ox/files&perspective=list&folder=44&id=44.112">https://demo.ox.io/appsuite/#!&#38;app=io.ox/files&#38;perspective=list&#38;folder=44&#38;id=44.112</a></p>
+  <p class="io-ox-signature">Eva May<br/><br/>Marketing Director</p>
+ 
+</body></html>

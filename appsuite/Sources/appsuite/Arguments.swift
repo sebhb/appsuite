@@ -26,6 +26,16 @@ struct ImportPathOptions: ParsableArguments {
     }
 }
 
+struct ImportFolderTreeOption: ParsableCommand {
+    @Flag(name: [.customLong("importFolderTree")], help: "Import Folder Tree")
+    var importFolderTree = false
+}
+
+struct GenerateTargetFolderOption: ParsableCommand {
+    @Flag(name: [.customLong("createTargetFolderIfNecessary")], help: "Create target folder if it doesn't exist")
+    var createTargetFolderIfNecessary = false
+}
+
 struct ImportStretchOptions: ParsableArguments {
     @Option(name: [.customLong("stretchPeriod")], help: "The period (in days) over which to randomly distribute emails. Dates will be left untouched if omitted.")
     var stretchPeriod: Int?
@@ -34,6 +44,9 @@ struct ImportStretchOptions: ParsableArguments {
 struct ImportMailOptions: ParsableArguments {
     @Option(name: [.customLong("adjustRecipient")], help: "Set the recipient to the user importing the mails")
     var adjustRecipient: Bool = false
+
+    @Option(name: [.customLong("targetFolder")], help: "Name of the target folder to import the mails into")
+    var targetFolderName: String = "INBOX"
 }
 
 struct GenerateAppointmentsOptions: ParsableArguments {
