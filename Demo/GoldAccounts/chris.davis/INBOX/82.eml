@@ -1,0 +1,55 @@
+Return-Path: <eva.may.999877602@demo.ox.io>
+Received: from demo.ox.io ([unix socket])
+	 by demo (Cyrus v2.2.13-Debian-2.2.13-19+squeeze3) with LMTPA;
+	 Tue, 08 Jan 2013 13:41:09 +0100
+X-Sieve: CMU Sieve 2.2
+Received: from 7edp.ox.io (localhost [127.0.0.1])
+	by demo.ox.io (Postfix) with ESMTP id 06B955E38D
+	for <chris.davis.999877602@demo.ox.io>; Tue,  8 Jan 2013 13:41:09 +0100 (CET)
+Date: Tue, 8 Jan 2013 13:41:09 +0100 (CET)
+From: "May, Eva" <eva.may.999877602@demo.ox.io>
+Reply-To: "May, Eva" <eva.may.999877602@demo.ox.io>
+To: chris.davis.999877602@demo.ox.io
+Message-ID: <1158722881.245.1357648869027.open-xchange@7edp.ox.io>
+Subject: New task: Update Yearly Event Plan
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3 (normal)
+X-Mailer: Open-Xchange Mailer v7.0.0-Rev3
+X-OX-Reminder: 3,35,4
+X-Open-Xchange-Module: Tasks
+X-Open-Xchange-Type: New
+X-Open-Xchange-Object: 3
+X-OX-Marker: 49ca9285-7e98-40dc-a7ec-5a9db5587bb0
+
+
+A new task was created by May, Eva.
+You can check this task in your tasks:
+http://7edp.ox.io/#m=task&i=3&f=35
+
+Task
+====
+Created by: May, Eva
+Created at: Tuesday, Jan 8, 2013 1:41:00 PM, CET
+Description: Update Yearly Event Plan
+Folder: Tasks
+Priority: High
+Status: In progress (10%)
+
+Start date: Apr 10, 2013
+Due date: Sep 19, 2013
+
+
+Participants
+============
+Bush, Anna (waiting)
+Davis, Chris (waiting)
+Jones, Paul (waiting)
+Smith, David (waiting)
+
+Resources
+=========
+No resources have been scheduled.
+
+========================================== 

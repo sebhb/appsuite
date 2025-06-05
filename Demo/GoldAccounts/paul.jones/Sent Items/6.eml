@@ -1,0 +1,65 @@
+Date: Fri, 24 Feb 2017 12:30:19 +0100 (CET)
+From: "Jones, Paul" <paul.jones.999877602@demo.ox.io>
+To: Paul Jones <paul.jones.999877602@demo.ox.io>
+Message-ID: <f2a13607-6cbe-4951-abf2-f50dee5ee205@GUARD>
+Subject: Test
+MIME-Version: 1.0
+Content-Type: multipart/encrypted; protocol="application/pgp-encrypted"; 
+	boundary="----=_Part_35_210481980.1487935819224"
+X-Priority: 3
+X-OX-Marker: 1348ba98-4612-46e7-921b-fb1f6a33f081
+
+------=_Part_35_210481980.1487935819224
+Content-Type: application/pgp-encrypted
+Content-Transfer-Encoding: 7bit
+Content-Description: PGP/MIME version identification
+
+Version: 1
+
+------=_Part_35_210481980.1487935819224
+Content-Type: application/octet-stream; name=encrypted.asc
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline; filename=encrypted.asc
+Content-Description: OpenPGP encrypted message
+
+-----BEGIN PGP MESSAGE-----
+Version: BCPG v1.53
+
+hQEMA+IDdpGd0PPPAQf/YEhl/Yrd2YeeOX3PbxeTB4j1A+dCjWSW0ARr+CeJz/Z3
+tZvUlyND6pAvBO4OeTHb0fc+chmUhDaFKVrlYYFti6pOhJRfwFgGJD2g7bv5IIwM
+pv14qoUTmViUc6Xi06QJBjtVuz9cen/Q4sgoM3fowtokpNI77MRlyrkjpuf9sC/V
+0OVp1zLEcYmY4umGRDyq2s0l6LRf0GqAe65qPdEGoZK+SR//bIUAilHrNpt/nziR
+0Ndg7Q5CFI5OLpSVcCK1DM7iSZNSPDfdPRZardNVZsMhZ0pVo8GLTKFbhoEbuGc4
+kzQZMs9BfP3DS4CrvzWxcQDwgqJnjHGXWv0lIe9uuYUBDAPiA3aRndDzzwEIAKYA
+nSjqdruOMTchERpRDjM7ckiHmSJQ5upKXL39EYUsG/xXOl8bjUCxWYVkpapBHYFu
+rxIdJCpQZi+RBtdfd+cpc74tGRg9PesrZQ2zMDlFXWve1gtQTpViA/P0O5UuQ5dZ
+FARY+s5xrLUZ30ZXE/AstBvLkaZ6XelEdElhFIvCm0vtyMAe4Mw8TKpg2T0J+ykl
+wm8dNj9wRHBrEXcAsY9UesomcwsadvcWj7hDmiO2NK6si0Ijg6j+Ri4TnreEG/OS
+b7dxSaUvV6+8vJMhJdTjQiF3D42l5diZhvfEWHMwUQflfACe+tHVVfZCnv7DmtQN
+OjsDNFNzEJxZh5bqRWXSwPcBhzS0lPEawwZpHomMNTt+iWsZ/R/qp8E/+S0D3JvM
+VqDg/7EmKrm6w8LaOXfrxzyL1r5gIqD3BoQSVmiE8dgxqhH70Fq5gH8rVRHKEZB0
+nTDQuFAdIUY+M8UcCjaVTkcB1bf5bNY6hOGsMs5FhxrAH9+tfHBAskYprR4jAZHe
+t8PvDcItBPObeUDP7VRRjsQjuWoxuoCyOwklgqFeGfE6y63rrZfwuxSp1WVO3FPp
+82OygwhD3mZm8dfu4z4sYdBIUc8awgi8NVewJtB9P413q/21HSsn+w4FqHB/9wTo
+19vmZyJuXqisAGpLeOkkL/EuwcB7Va4fO1T22OGqTlETWoLvYHl3D0aELDyCHU9x
+CVMIcqtL4rLrKeORt1Bao0LQfWnK+XalG9ab3HVWV1OGtdrBowU+tkx04zYzVNye
+rX2SrcDOqvyfBjcJw0eaGBV+/wqOLFnQuzYhiulirY8xLO4Lmbt9K69GixVW1jcE
+vN0unQeIdaalE2hhTFGP1Wbr1rs0Iaak4qVk3sPTd2nq+BtRB7NoRXU1A6ja70v/
+0jDV7/DhDd07Irn4pMhEejBV6SGgOvSh
+=bD63
+-----END PGP MESSAGE-----
+
+------=_Part_35_210481980.1487935819224
+Content-Type: text/plain; charset=utf-8; name=help.txt
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline; filename=help.txt
+
+This email was sent using PGP Encryption.  In order to read this email, you should use the webmail system for decoding and managing this email.
+
+If you do not know how to log into your webmail, please try this link
+https://gold.ox.io
+
+
+
+
+------=_Part_35_210481980.1487935819224--
