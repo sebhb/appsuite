@@ -1,5 +1,5 @@
 import Foundation
 
-struct GetContactsResponse: Decodable {
+struct GetColumnsResponse: Decodable {
     let data: [[String?]]
 }

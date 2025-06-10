@@ -51,7 +51,7 @@ Use `appsuite --help` for any subcommand. All custom JSON formates for data impo
 
 ### Why Swift
 
-[Swift](https://www.swift.org) is a modern and robust programming language. Apple's [Argument Parser](https://github.com/apple/swift-argument-parser) is a powerful package for the processing of command line arguments. Swift uses [ARC](https://en.wikipedia.org/wiki/Automatic_Reference_Counting) and not Garbage Collection with all of its disadvantages.
+[Swift](https://www.swift.org) is a modern and robust programming language. Apple's [Argument Parser](https://github.com/apple/swift-argument-parser) is a powerful package for the processing of command line arguments. Swift uses [ARC](https://en.wikipedia.org/wiki/Automatic_Reference_Counting) and not [Garbage Collection with all of its disadvantages](https://www.swift.org/blog/swift-at-apple-migrating-the-password-monitoring-service-from-java/).
 
 ### Demo
 
@@ -72,7 +72,6 @@ There is a small sample script in the "Demo" folder. It takes three parameters (
   - Use [Multiple](https://documentation.open-xchange.com/components/middleware/http/8/index.html#!Multiple) Calls to combine several smaller calls
 - Uploading Files
   - Chunked upload for larger files
-  - Upload hierarchies (not only to Drive root)
 - Cross Platform workaround for ListFormatter on Linux currently only supports Locale en for lists
   
 ### Cross Compiling on a Mac for Linux

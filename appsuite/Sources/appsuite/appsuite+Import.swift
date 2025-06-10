@@ -134,7 +134,7 @@ extension Appsuite {
     }
 
     struct ImportFiles: AsyncParsableCommand {
-        static let configuration = CommandConfiguration(commandName: "files", abstract: "Uploads Files.", discussion: "Uploads all files at `source` to the specified user's Drive root folder. This command does not do any validation whether the user has Drive capabilities enabled or whether there is enough quoata available. Also, this does not import hierarchies. It simply uploads all files at the specified path without traversing any subdirectories.")
+        static let configuration = CommandConfiguration(commandName: "files", abstract: "Uploads Files.", discussion: "Uploads all files at `source` to the specified user's Drive root folder. This command does not do any validation whether the user has Drive capabilities enabled or whether there is enough quoata available. This does upload folder hierarchies. Any subfolders will be created if necessary and contents will be uploaded. If you want to upload files to any of the \"Standard Folders\" (Documents, Music, Pictures, Videos), remember that they might have localized names shown in the UI but their names are always English and the English names have to be used in order to populate these.")
 
         @OptionGroup var userCredentialsOptions: UserCredentialsOptions
         @OptionGroup var pathOptions: ImportPathOptions
