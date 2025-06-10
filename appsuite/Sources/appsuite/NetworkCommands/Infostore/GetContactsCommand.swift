@@ -26,7 +26,7 @@ class GetContactsCommand: NetworkCommand<[Person]> {
     override func result(from data: Data) throws -> [Person]? {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        let contactsArray = try decoder.decode(GetContactsResponse.self, from: data)
+        let contactsArray = try decoder.decode(GetColumnsResponse.self, from: data)
         let contacts = contactsArray.data
 
         let result = contacts.map() {

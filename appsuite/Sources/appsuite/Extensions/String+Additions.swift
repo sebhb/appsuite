@@ -22,7 +22,7 @@ extension String {
     }
 }
 
-// Resolving
+// Path Operations
 extension String {
     static func resolvePath(_ input: String) -> String {
         if input.hasPrefix("/") {
@@ -34,5 +34,13 @@ extension String {
         }
         let currentDirectory = FileManager.default.currentDirectoryPath
         return currentDirectory.appendingPathComponent(input)
+    }
+
+    func isDirectoryPath() -> Bool {
+        var statbuf = stat()
+        if stat(self, &statbuf) == 0 {
+            return (statbuf.st_mode & S_IFMT) == S_IFDIR
+        }
+        return false
     }
 }
