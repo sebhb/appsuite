@@ -20,7 +20,7 @@ class UploadFilesWorker: InfostoreBaseWorker {
                 continue
             }
             guard let fileContents = try? Data(contentsOf: URL(fileURLWithPath: file)), fileContents.count > 0 else {
-                print("Could not read file \(file) - This could be a directory. Skipping.")
+                print("Could not read file '\(file)'. Skipping.")
                 continue
             }
             let filename = file.components(separatedBy: FileManager.systemPathSeparator).last!
