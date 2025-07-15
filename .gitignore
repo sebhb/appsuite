@@ -62,4 +62,3 @@ fastlane/screenshots/**/*.png
 fastlane/test_output
 
 # Demo script
-demo.sh
