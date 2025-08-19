@@ -1,10 +1,11 @@
 import Foundation
 import AsyncHTTPClient
 import NIOHTTP1
+import NIOSSL
+import NIOFoundationCompat
 
 class NetworkCommand<T: Decodable>: NSObject {
     let serverInfo: ServerInfo
-    let urlSession = URLSession.shared
 
     init(serverInfo: ServerInfo) {
         self.serverInfo = serverInfo
@@ -105,6 +106,12 @@ class NetworkCommand<T: Decodable>: NSObject {
         }
         if let bodyData = bodyData {
             request.body = .bytes(bodyData)
+        }
+
+        if serverInfo.certificateVerification == false {
+            var tls = TLSConfiguration.makeClientConfiguration()
+            tls.certificateVerification = .none
+            request.tlsConfiguration = tls
         }
 
         // Apply cookies

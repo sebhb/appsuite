@@ -11,7 +11,7 @@ class InfostoreBaseWorker {
 
     func login() async throws {
         let cookieJar = CookieJar()
-        let serverInfo = ServerInfo(serverAddress: userCredentialsOptions.server, cookieJar: cookieJar)
+        let serverInfo = ServerInfo(serverAddress: userCredentialsOptions.server, cookieJar: cookieJar, certificateVerification: userCredentialsOptions.validateCertificate)
         let loginCommand = LoginCommand(userName: userCredentialsOptions.userName, password: userCredentialsOptions.password, serverInfo: serverInfo)
 
         guard let session = try await loginCommand.execute() else {

@@ -10,6 +10,9 @@ struct UserCredentialsOptions: ParsableArguments {
     @Option(name: [.customShort("s"), .customLong("server")], help: "Server")
     var server: String
 
+    @Option(name: [.customLong("validateCertificate")], help: "Whether to validate the SSL certificate")
+    var validateCertificate: Bool = true
+    
     @Option(name: [.customShort("m"), .customLong("name")], help: "User Name")
     var userName: String
 
@@ -66,3 +69,4 @@ struct DeleteAppointmentsOptions: ParsableArguments {
     @Option(name: [.customLong("years")], help: "The number of years into the past and into the future to delete")
     var years: Int = 1
 }
+

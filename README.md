@@ -77,4 +77,8 @@ There is a small sample script in the "Demo" folder. It takes three parameters (
 ### Cross Compiling on a Mac for Linux
 This statically compiles, including the swift runtime. The binary requires a Linux that supports glibc 2.38 like Ubuntu 23.10 or Fedora 38. Red Hat Linux (up to 9.x) does not support this.
 
-`docker run --platform linux/amd64 --rm -v "$PWD":/src -w /src swift:6.0 /bin/bash -c "swift package clean && swift build -c release -Xswiftc -static-stdlib"`
+`docker run --platform linux/amd64 --rm \
+  --user $(id -u):$(id -g) \
+  -e HOME=/tmp -e XDG_CACHE_HOME=/tmp/.cache -e XDG_CONFIG_HOME=/tmp/.config \
+  -v "$PWD":/src -w /src \
+  swift:6.0 /bin/bash -lc 'mkdir -p $HOME $XDG_CACHE_HOME $XDG_CONFIG_HOME $HOME/.swiftpm $HOME/.cache && swift build -c release -Xswiftc -static-stdlib'`
