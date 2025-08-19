@@ -4,7 +4,7 @@ class MultipartNetworkCommand<U: Decodable>: NetworkCommand<U> {
 
     let boundary: String = "----Boundary-\(UUID().uuidString)"
 
-    override func method() -> HTTPMethod {
+    override func method() -> AppsuiteHTTPMethod {
         .Post
     }
 

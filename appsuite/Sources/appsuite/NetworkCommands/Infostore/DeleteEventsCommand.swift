@@ -8,10 +8,10 @@ class DeleteEventsCommand: NetworkCommand<DeletedEventsResponse> {
     init(session: RemoteSession, events: GetEventsResponse) {
         self.remoteSession = session
         self.events = events
-        super.init(serverAddress: remoteSession.server)
+        super.init(serverInfo: remoteSession.serverInfo)
     }
 
-    override func method() -> HTTPMethod {
+    override func method() -> AppsuiteHTTPMethod {
         .Put
     }
 

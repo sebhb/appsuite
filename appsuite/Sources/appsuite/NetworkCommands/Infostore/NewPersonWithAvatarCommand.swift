@@ -12,7 +12,7 @@ class NewPersonWithAvatarCommand: MultipartNetworkCommand<ContactCreationRespons
         self.newPerson = newPerson
         self.avatarData = avatarData
         self.avatarContentType = contentType
-        super.init(serverAddress: remoteSession.server)
+        super.init(serverInfo: session.serverInfo)
     }
 
     override func requestParameters() -> [String : String] {

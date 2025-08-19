@@ -8,10 +8,10 @@ class CreateAppointmentCommand: NetworkCommand<AppointmentCreationReply> {
     init(session: RemoteSession, appointment: Appointment) {
         self.remoteSession = session
         self.appointment = appointment
-        super.init(serverAddress: remoteSession.server)
+        super.init(serverInfo: remoteSession.serverInfo)
     }
 
-    override func method() -> HTTPMethod {
+    override func method() -> AppsuiteHTTPMethod {
         .Put
     }
 

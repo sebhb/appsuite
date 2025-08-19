@@ -9,4 +9,9 @@ struct Session: Decodable {
 struct RemoteSession {
     let session: String
     let server: String
+    let cookieJar: CookieJar
+
+    var serverInfo: ServerInfo {
+        return ServerInfo(serverAddress: server, cookieJar: cookieJar)
+    }
 }

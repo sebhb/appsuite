@@ -12,10 +12,10 @@ class GetMeCommand: NetworkCommand<GetMeResponse> {
 
     init(session: RemoteSession) {
         self.remoteSession = session
-        super.init(serverAddress: remoteSession.server)
+        super.init(serverInfo: session.serverInfo)
     }
 
-    override func method() -> HTTPMethod {
+    override func method() -> AppsuiteHTTPMethod {
         .Get
     }
 

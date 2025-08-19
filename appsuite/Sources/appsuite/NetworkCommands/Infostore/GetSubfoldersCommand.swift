@@ -8,10 +8,10 @@ class GetSubfoldersCommand: NetworkCommand<[Subfolder]> {
     init(folder: String, session: RemoteSession) {
         self.remoteSession = session
         self.folder = folder
-        super.init(serverAddress: remoteSession.server)
+        super.init(serverInfo: session.serverInfo)
     }
 
-    override func method() -> HTTPMethod {
+    override func method() -> AppsuiteHTTPMethod {
         .Get
     }
 

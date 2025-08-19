@@ -8,10 +8,10 @@ class CreateMailFolderCommand: NetworkCommand<CreateFolderResponse> {
     init(session: RemoteSession, folderName: String) {
         self.remoteSession = session
         self.folderName = folderName
-        super.init(serverAddress: remoteSession.server)
+        super.init(serverInfo: remoteSession.serverInfo)
     }
 
-    override func method() -> HTTPMethod {
+    override func method() -> AppsuiteHTTPMethod {
         .Put
     }
 

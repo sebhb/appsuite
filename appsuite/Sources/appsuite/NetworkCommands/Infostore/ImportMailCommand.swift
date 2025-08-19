@@ -10,7 +10,7 @@ class ImportMailCommand: MultipartNetworkCommand<ImportMailResponse> {
         self.session = session
         self.mailData = mailData
         self.folder = folder ?? "INBOX"
-        super.init(serverAddress: session.server)
+        super.init(serverInfo: session.serverInfo)
     }
 
     override func requestParameters() -> [String : String] {

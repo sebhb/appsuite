@@ -8,10 +8,10 @@ class CheckMailFolderExistsCommand: NetworkCommand<MailFolderExaminationError> {
     init(session: RemoteSession, targetFolder: String) {
         self.remoteSession = session
         self.targetFolder = targetFolder
-        super.init(serverAddress: remoteSession.server)
+        super.init(serverInfo: remoteSession.serverInfo)
     }
 
-    override func method() -> HTTPMethod {
+    override func method() -> AppsuiteHTTPMethod {
         .Get
     }
 

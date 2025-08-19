@@ -5,13 +5,13 @@ class LoginCommand: NetworkCommand<Session> {
     let userName: String
     let password: String
 
-    init(userName: String, password: String, serverAddress: String) {
+    init(userName: String, password: String, serverInfo: ServerInfo) {
         self.userName = userName
         self.password = password
-        super.init(serverAddress: serverAddress)
+        super.init(serverInfo: serverInfo)
     }
 
-    override func method() -> HTTPMethod {
+    override func method() -> AppsuiteHTTPMethod {
         .Post
     }
 

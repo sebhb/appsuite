@@ -8,10 +8,10 @@ class GetEventsCommand: NetworkCommand<GetEventsResponse> {
     init(session: RemoteSession, years: Int) {
         self.remoteSession = session
         self.years = years
-        super.init(serverAddress: remoteSession.server)
+        super.init(serverInfo: session.serverInfo)
     }
 
-    override func method() -> HTTPMethod {
+    override func method() -> AppsuiteHTTPMethod {
         .Get
     }
 

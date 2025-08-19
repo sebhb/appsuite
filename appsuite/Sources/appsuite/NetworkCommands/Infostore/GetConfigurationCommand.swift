@@ -32,10 +32,10 @@ class GetConfigurationCommand: NetworkCommand<ConfigurationResponse> {
     init(session: RemoteSession, property: ConfigurationProperty) {
         self.remoteSession = session
         self.property = property
-        super.init(serverAddress: remoteSession.server)
+        super.init(serverInfo: session.serverInfo)
     }
 
-    override func method() -> HTTPMethod {
+    override func method() -> AppsuiteHTTPMethod {
         .Get
     }
 

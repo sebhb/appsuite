@@ -12,7 +12,7 @@ class UploadFileCommand: MultipartNetworkCommand<UploadFileCommandResponse> {
         self.filename = filename
         self.targetFolderId = targetfolderId
         self.fileContents = fileContents
-        super.init(serverAddress: session.server)
+        super.init(serverInfo: session.serverInfo)
     }
 
     override func requestParameters() -> [String : String] {

@@ -8,10 +8,10 @@ class CreateTaskCommand: NetworkCommand<CreateTaskResponse> {
     init(session: RemoteSession, task: TaskCreationRequest) {
         self.remoteSession = session
         self.task = task
-        super.init(serverAddress: remoteSession.server)
+        super.init(serverInfo: remoteSession.serverInfo)
     }
 
-    override func method() -> HTTPMethod {
+    override func method() -> AppsuiteHTTPMethod {
         .Put
     }
 

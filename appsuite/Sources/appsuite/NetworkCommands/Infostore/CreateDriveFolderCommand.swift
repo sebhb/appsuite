@@ -10,10 +10,10 @@ class CreateDriveFolderCommand: NetworkCommand<CreateFolderResponse> {
         self.remoteSession = session
         self.folderName = folderName
         self.parentID = parentID
-        super.init(serverAddress: remoteSession.server)
+        super.init(serverInfo: remoteSession.serverInfo)
     }
 
-    override func method() -> HTTPMethod {
+    override func method() -> AppsuiteHTTPMethod {
         .Put
     }
 

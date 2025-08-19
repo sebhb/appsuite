@@ -1,17 +1,16 @@
 import Foundation
-#if canImport(FoundationNetworking)
-import FoundationNetworking
-#endif
+import AsyncHTTPClient
+import NIOHTTP1
 
 class NetworkCommand<T: Decodable>: NSObject {
-    let serverAddress: String
+    let serverInfo: ServerInfo
     let urlSession = URLSession.shared
 
-    init(serverAddress: String) {
-        self.serverAddress = serverAddress
+    init(serverInfo: ServerInfo) {
+        self.serverInfo = serverInfo
     }
 
-    func method() -> HTTPMethod {
+    func method() -> AppsuiteHTTPMethod {
         .Post
     }
 
@@ -52,7 +51,7 @@ class NetworkCommand<T: Decodable>: NSObject {
         let function = oxFunction()
         let parameters = requestParameters()
 
-        var serverAddress = "https://" + self.serverAddress + "/"
+        var serverAddress = "https://" + self.serverInfo.serverAddress + "/"
 
         var cSet = CharacterSet.urlQueryAllowed
         cSet.remove(charactersIn: "/")
@@ -64,53 +63,65 @@ class NetworkCommand<T: Decodable>: NSObject {
             serverAddress += "?" + encodedParameters!
         }
 
-        var request = URLRequest(url: URL(string: serverAddress)!)
-        request.httpMethod = method().rawValue
+        let client = HTTPClient(eventLoopGroupProvider: .singleton)
+        defer {
+            let _ = client.shutdown()
+        }
+
+        var headers = [String: String]()
+        var bodyData: Data?
 
         if method() == .Post {
-            request.setValue(postContentType(), forHTTPHeaderField: "Content-Type")
-            var data: Data?
+            headers["Content-Type"] = postContentType()
+
             if usesRequestDictionary() {
-                data = requestDictionary()?.httpBodyData
+                bodyData = requestDictionary()?.httpBodyData
             }
             else {
-                data = requestData()
+                bodyData = requestData()
             }
-            request.httpBody = data
         }
         else {
             // GET, PUT
 
-            var data: Data?
-
             if usesRequestDictionary() {
                 if let dictionary = requestDictionary() {
-                    data = try! JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
+                    bodyData = try! JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
                 }
             }
             else {
-                data = requestData()
-            }
-
-            if let data {
-                request.httpBody = data
+                bodyData = requestData()
             }
         }
 
         additionalHTTPHeaderFields()?.forEach { key, value in
-            request.setValue(value, forHTTPHeaderField: key)
+            headers[key] = value
         }
 
-        let (data, response) = try await urlSession.data(for: request)
-
-        if let httpResponse = response as? HTTPURLResponse {
-            let statusCode = httpResponse.statusCode
-
-            if statusCode != 200 {
-                let error = NSError(domain: "NetworkCommand", code: statusCode, userInfo: nil)
-                throw error
-            }
+        var request = HTTPClientRequest(url: serverAddress)
+        request.method = HTTPMethod(rawValue: method().rawValue)
+        if headers.count > 0 {
+            request.headers = HTTPHeaders(headers.map { ($0, $1) })
         }
+        if let bodyData = bodyData {
+            request.body = .bytes(bodyData)
+        }
+
+        // Apply cookies
+        serverInfo.cookieJar.applyCookies(to: &request, for: self.serverInfo.serverAddress)
+
+        let response = try await client.execute(request, timeout: .seconds(30))
+        if response.status.code != 200 {
+            let error = NSError(domain: "NetworkCommand", code: Int(response.status.code), userInfo: nil)
+            throw error
+        }
+
+        // Save cookies
+        serverInfo.cookieJar.storeCookies(from: response, for: self.serverInfo.serverAddress)
+
+        let expected = response.headers.first(name: "content-length").flatMap(Int.init) ?? 1_048_576 // 1 MiB
+        let buf = try await response.body.collect(upTo: expected)
+        let data = Data(buffer: buf)
 
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase

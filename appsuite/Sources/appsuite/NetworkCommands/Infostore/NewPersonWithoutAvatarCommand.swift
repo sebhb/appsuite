@@ -8,10 +8,10 @@ class NewPersonWithoutAvatarCommand: NetworkCommand<ContactCreationResponse> {
     init(session: RemoteSession, newPerson: NewPerson) {
         self.remoteSession = session
         self.newPerson = newPerson
-        super.init(serverAddress: remoteSession.server)
+        super.init(serverInfo: session.serverInfo)
     }
 
-    override func method() -> HTTPMethod {
+    override func method() -> AppsuiteHTTPMethod {
         .Put
     }
 
