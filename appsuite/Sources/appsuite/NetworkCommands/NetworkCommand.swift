@@ -118,7 +118,7 @@ class NetworkCommand<T: Decodable>: NSObject {
         serverInfo.cookieJar.applyCookies(to: &request, for: self.serverInfo.serverAddress)
 
         let response = try await client.execute(request, timeout: .seconds(30))
-        if response.status.code != 200 {
+        if !(200..<300).contains(response.status.code) {
             let error = NSError(domain: "NetworkCommand", code: Int(response.status.code), userInfo: nil)
             throw error
         }

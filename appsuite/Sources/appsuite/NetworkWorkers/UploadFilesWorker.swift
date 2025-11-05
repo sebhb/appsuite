@@ -8,6 +8,9 @@ class UploadFilesWorker: InfostoreBaseWorker {
         try await login()
         try await getUserSettings()
 
+        guard driveRootFolder != "null" else {
+            throw InfostoreError(message: "Could not find root folder.")
+        }
         try await upload(filePaths: paths, id: driveRootFolder)
 
         try await logout()

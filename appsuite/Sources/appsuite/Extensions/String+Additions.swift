@@ -29,8 +29,10 @@ extension String {
             return input
         }
         if input.hasPrefix("~") {
-            let home = ProcessInfo.processInfo.environment["HOME"] ?? ""
-            return home + input.dropFirst()
+            let env = ProcessInfo.processInfo.environment
+            let homePath = env["HOME"] ?? env["USERPROFILE"] ?? FileManager.default.currentDirectoryPath
+
+            return homePath + input.dropFirst()
         }
         let currentDirectory = FileManager.default.currentDirectoryPath
         return currentDirectory.appendingPathComponent(input)
