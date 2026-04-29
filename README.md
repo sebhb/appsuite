@@ -74,11 +74,52 @@ There is a small sample script in the "Demo" folder. It takes three parameters (
   - Chunked upload for larger files
 - Cross Platform workaround for ListFormatter on Linux currently only supports Locale en for lists
   
-### Cross Compiling on a Mac for Linux
-This statically compiles, including the swift runtime. The binary requires a Linux that supports glibc 2.38 like Ubuntu 23.10 or Fedora 38. Red Hat Linux (up to 9.x) does not support this.
+### Building for macOS
 
-`docker run --platform linux/amd64 --rm \
-  --user $(id -u):$(id -g) \
-  -e HOME=/tmp -e XDG_CACHE_HOME=/tmp/.cache -e XDG_CONFIG_HOME=/tmp/.config \
-  -v "$PWD":/src -w /src \
-  swift:6.0 /bin/bash -lc 'mkdir -p $HOME $XDG_CACHE_HOME $XDG_CONFIG_HOME $HOME/.swiftpm $HOME/.cache && swift build -c release -Xswiftc -static-stdlib'`
+```bash
+cd appsuite
+swift build -c release
+```
+
+The binary will be at `.build/release/appsuite`.
+
+### Building for Linux on Linux
+
+Install Swift from [swift.org](https://www.swift.org/install/linux/), then:
+
+```bash
+cd appsuite
+swift build -c release
+```
+
+### Cross-compiling for Linux on a Mac
+
+This uses the [Static Linux SDK](https://www.swift.org/documentation/articles/static-linux-getting-started.html) to produce a fully statically linked binary (using musl instead of glibc). The resulting binary runs on **any** x86-64 Linux distribution regardless of its glibc version.
+
+#### One-time setup
+
+1. Install [swiftly](https://www.swift.org/install/macos/), the Swift toolchain manager:
+
+```bash
+curl -O https://download.swift.org/swiftly/darwin/swiftly.pkg && \
+installer -pkg swiftly.pkg -target CurrentUserHomeDirectory && \
+~/.swiftly/bin/swiftly init --quiet-shell-followup && \
+. ~/.swiftly/env.sh
+```
+
+2. Install the Static Linux SDK (the version must match the installed Swift toolchain, check [swift.org](https://www.swift.org/documentation/articles/static-linux-getting-started.html) for current versions and checksums):
+
+```bash
+swift sdk install https://download.swift.org/swift-6.2.3-release/static-sdk/swift-6.2.3-RELEASE/swift-6.2.3-RELEASE_static-linux-0.0.1.artifactbundle.tar.gz \
+  --checksum f30ec724d824ef43b5546e02ca06a8682dafab4b26a99fbb0e858c347e507a2c
+```
+
+#### Building
+
+```bash
+. ~/.swiftly/env.sh
+cd appsuite
+swift build -c release --swift-sdk x86_64-swift-linux-musl
+```
+
+The binary will be at `.build/release/appsuite`. You can optionally reduce its size by stripping debug symbols on a Linux machine: `strip appsuite`.
