@@ -56,11 +56,12 @@ extension Appsuite {
                 try await uploadMailsWorker.prepare()
                 
                 for upload in mailUploads {
-                    let folder = upload.targetFolderName
+                    var folder = upload.targetFolderName
                     let files = upload.mailPaths
                     if ensureTargetFolderExists {
-                        // TODO: pass on name returned by server!
-                        _ = try await uploadMailsWorker.ensureTargetFolderExists(folder)
+                        // Resolve to the actual server folder: a standard folder's
+                        // real name, or a possibly auto-renamed custom folder.
+                        folder = try await uploadMailsWorker.ensureTargetFolderExists(folder)
                     }
                     try await uploadMailsWorker.uploadMails(paths: files, to: folder)
                 }
