@@ -37,67 +37,25 @@ extension Appsuite {
         @OptionGroup var createTargetFolderIfNecessary: GenerateTargetFolderOption
 
         mutating func run() async throws {
+            let progress = ProgressEvent.consolePrinter()
+            let service = AppsuiteService()
             do {
                 let path = pathOptions.resolvedPath
-                let mailUploads: [MailUpload]
-
                 if importFolderTree.importFolderTree {
-                    mailUploads = try mailUploadsForTree(at: path)
+                    try await service.importMailTree(userCredentialsOptions.credentials, treeRoot: path, adjustRecipient: importMailOptions.adjustRecipient, stretchPeriod: importStretchOptions.stretchPeriod, onProgress: progress)
                 }
                 else {
-                    guard let files = try emlPaths(at: path) else {
+                    let files = try FileManager.default.contentsOfDirectory(atPath: path).filter { $0.hasSuffix(".eml") }.map { path.appendingPathComponent($0) }
+                    guard files.count > 0 else {
+                        print(".eml files not found in \(path)")
                         return
                     }
-                    mailUploads = [MailUpload(targetFolderName: importMailOptions.targetFolderName, mailPaths: files)]
+                    try await service.importMails(userCredentialsOptions.credentials, mailPaths: files, targetFolder: importMailOptions.targetFolderName, createFolder: createTargetFolderIfNecessary.createTargetFolderIfNecessary, adjustRecipient: importMailOptions.adjustRecipient, stretchPeriod: importStretchOptions.stretchPeriod, onProgress: progress)
                 }
-
-                let ensureTargetFolderExists = importFolderTree.importFolderTree ? true : createTargetFolderIfNecessary.createTargetFolderIfNecessary
-                let uploadMailsWorker = UploadMailsWorker(userCredentialsOptions: userCredentialsOptions, adjustrecipient: importMailOptions.adjustRecipient, stretchPeriod: importStretchOptions.stretchPeriod)
-                try await uploadMailsWorker.prepare()
-                
-                for upload in mailUploads {
-                    var folder = upload.targetFolderName
-                    let files = upload.mailPaths
-                    if ensureTargetFolderExists {
-                        // Resolve to the actual server folder: a standard folder's
-                        // real name, or a possibly auto-renamed custom folder.
-                        folder = try await uploadMailsWorker.ensureTargetFolderExists(folder)
-                    }
-                    try await uploadMailsWorker.uploadMails(paths: files, to: folder)
-                }
-                try await uploadMailsWorker.logout()
             }
             catch {
                 print("An error occurred: \(error)")
             }
-        }
-
-        struct MailUpload {
-            let targetFolderName: String
-            let mailPaths: [String]
-        }
-
-        func emlPaths(at path: String) throws -> [String]? {
-            let files = try FileManager.default.contentsOfDirectory(atPath: path).filter { $0.hasSuffix(".eml") }.map { path.appendingPathComponent($0) }
-            guard files.count > 0 else {
-                print(".eml files not found in \(path)")
-                return nil
-            }
-            return files
-        }
-
-        func mailUploadsForTree(at rootPath: String) throws -> [MailUpload] {
-            var result = [MailUpload]()
-
-            let targetFolders = try FileManager.default.contentsOfDirectory(atPath: rootPath).filter { !$0.hasPrefix(".") }
-            for folder in targetFolders {
-                let basePath = rootPath.appendingPathComponent(folder)
-                if let mailsPaths = try emlPaths(at: basePath) {
-                    result.append(MailUpload(targetFolderName: folder, mailPaths: mailsPaths))
-                }
-            }
-
-            return result
         }
     }
 
@@ -120,13 +78,8 @@ extension Appsuite {
         @OptionGroup var pathOptions: ImportPathOptions
 
         mutating func run() async throws {
-            let appointmentCreationWorker = AppointmentCreationWorker(userCredentialsOptions: userCredentialsOptions)
             do {
-                let data = try Data(contentsOf: URL(fileURLWithPath: pathOptions.resolvedPath))
-                let jsonDecoder = JSONDecoder()
-                let appointments: [AppointmentRequest] = try jsonDecoder.decode([AppointmentRequest].self, from: data)
-
-                try await appointmentCreationWorker.createAppointments(appointmentRequests: appointments)
+                try await AppsuiteService().importAppointments(userCredentialsOptions.credentials, jsonPath: pathOptions.resolvedPath, onProgress: ProgressEvent.consolePrinter())
             }
             catch {
                 print("An error occurred: \(error)")
@@ -141,17 +94,16 @@ extension Appsuite {
         @OptionGroup var pathOptions: ImportPathOptions
 
         mutating func run() async throws {
-            let uploadFilesWorker = UploadFilesWorker(userCredentialsOptions: userCredentialsOptions)
             do {
                 let path = pathOptions.resolvedPath
 
                 let files = try FileManager.default.contentsOfDirectory(atPath: path).filter { !$0.hasPrefix(".") }.map { path.appendingPathComponent($0) }
                 guard files.count > 0 else {
-                    print("No files not found in \(path)")
+                    print("No files found in \(path)")
                     return
                 }
 
-                try await uploadFilesWorker.uploadFiles(files)
+                try await AppsuiteService().importFiles(userCredentialsOptions.credentials, paths: files, onProgress: ProgressEvent.consolePrinter())
             }
             catch {
                 print("An error occurred: \(error)")
@@ -175,13 +127,8 @@ extension Appsuite {
         @OptionGroup var pathOptions: ImportPathOptions
 
         mutating func run() async throws {
-            let taskCreationWorker = TaskCreationWorker(userCredentialsOptions: userCredentialsOptions)
             do {
-                let data = try Data(contentsOf: URL(fileURLWithPath: pathOptions.resolvedPath))
-                let jsonDecoder = JSONDecoder()
-                let tasks: [TaskRequest] = try jsonDecoder.decode([TaskRequest].self, from: data)
-
-                try await taskCreationWorker.createTasks(tasks)
+                try await AppsuiteService().importTasks(userCredentialsOptions.credentials, jsonPath: pathOptions.resolvedPath, onProgress: ProgressEvent.consolePrinter())
             }
             catch {
                 print("An error occurred: \(error)")
@@ -216,14 +163,8 @@ extension Appsuite {
         @OptionGroup var pathOptions: ImportPathOptions
 
         mutating func run() async throws {
-            let personCreationWorker = PersonCreationWorker(userCredentialsOptions: userCredentialsOptions)
             do {
-                let path = pathOptions.resolvedPath
-                let data = try Data(contentsOf: URL(fileURLWithPath: path))
-                let jsonDecoder = JSONDecoder()
-                let requests: [NewPersonRequest] = try jsonDecoder.decode([NewPersonRequest].self, from: data)
-                let requestsWithAvatars = requests.map { NewPersonWithAvatar.from($0, basePath: path.removingLastPathComponent()) }
-                try await personCreationWorker.createPersons(requestsWithAvatars)
+                try await AppsuiteService().importContacts(userCredentialsOptions.credentials, jsonPath: pathOptions.resolvedPath, onProgress: ProgressEvent.consolePrinter())
             }
             catch {
                 print("An error occurred: \(error)")

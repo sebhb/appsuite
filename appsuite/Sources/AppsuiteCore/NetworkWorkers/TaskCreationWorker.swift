@@ -4,17 +4,19 @@ class TaskCreationWorker: InfostoreBaseWorker {
 
     var tasksRootFolder: String!
 
-    func createTasks(_ taskCreationRequests: [TaskRequest]) async throws {
+    func createTasks(_ taskCreationRequests: [TaskRequest], onProgress: ProgressHandler = { _ in }) async throws {
         try await login()
         try await getUserSettings()
 
-        for request in taskCreationRequests {
+        let total = taskCreationRequests.count
+        for (index, request) in taskCreationRequests.enumerated() {
             let creationRequest = TaskCreationRequest.from(request, folderId: tasksRootFolder)
             let creationCommand = CreateTaskCommand(session: remoteSession, task: creationRequest)
             guard let _ = try await creationCommand.execute() else {
-                print("Could not create task.")
+                onProgress(.failed("tasks", "Could not create task \(index + 1) of \(total)."))
                 return
             }
+            onProgress(.progress("tasks", current: index + 1, total: total, "Created task \(index + 1) of \(total)"))
         }
 
         try await logout()

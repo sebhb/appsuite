@@ -48,6 +48,12 @@ class NetworkCommand<T: Decodable>: NSObject {
         true
     }
 
+    /// Per-request timeout in seconds. Overridable for commands that legitimately
+    /// take longer than the default (e.g. bulk deletes).
+    func requestTimeoutSeconds() -> Int64 {
+        30
+    }
+
     func execute() async throws -> T? {
         let function = oxFunction()
         let parameters = requestParameters()
@@ -117,7 +123,7 @@ class NetworkCommand<T: Decodable>: NSObject {
         // Apply cookies
         serverInfo.cookieJar.applyCookies(to: &request, for: self.serverInfo.serverAddress)
 
-        let response = try await client.execute(request, timeout: .seconds(30))
+        let response = try await client.execute(request, timeout: .seconds(requestTimeoutSeconds()))
         if response.status.code != 200 {
             let error = NSError(domain: "NetworkCommand", code: Int(response.status.code), userInfo: nil)
             throw error

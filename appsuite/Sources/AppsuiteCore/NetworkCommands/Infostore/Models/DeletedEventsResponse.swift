@@ -5,5 +5,6 @@ struct DeletedEvent: Decodable, Encodable {
 }
 
 struct DeletedEventsResponse: Decodable, Encodable {
-    let data: [DeletedEvent]
+    // Optional: a delete with no conflicts may return an empty/absent data field.
+    let data: [DeletedEvent]?
 }

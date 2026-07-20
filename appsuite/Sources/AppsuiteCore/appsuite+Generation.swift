@@ -51,20 +51,7 @@ extension Appsuite {
 
         mutating func run() async throws {
             do {
-                let getContactsWorker = GetContactsWorker(userCredentialsOptions: userCredentialsOptions)
-                let contacts = try await getContactsWorker.getContacts()
-
-                let data = try Data(contentsOf: URL(fileURLWithPath: pathOptions.resolvedPath))
-                let jsonDecoder = JSONDecoder()
-                let appointmentTemplates: [AppointmentTemplate] = try jsonDecoder.decode([AppointmentTemplate].self, from: data)
-
-                let locale = Locale(identifier: appointmentGenerationOptions.locale)
-
-                let appointmentGenerator = AppointmentGenerator.generator(days: appointmentGenerationOptions.days, appointmentDesciptions: appointmentTemplates, contacts: contacts, locale: locale)
-                let requests = appointmentGenerator.generateAppointments()
-
-                let appointmentCreationWorker = AppointmentCreationWorker(userCredentialsOptions: userCredentialsOptions)
-                try await appointmentCreationWorker.createAppointments(appointmentRequests: requests)
+                try await AppsuiteService().generateAppointments(userCredentialsOptions.credentials, templatesPath: pathOptions.resolvedPath, days: appointmentGenerationOptions.days, locale: appointmentGenerationOptions.locale, onProgress: ProgressEvent.consolePrinter())
             }
             catch {
                 print("An error occurred: \(error)")
@@ -134,16 +121,7 @@ extension Appsuite {
 
         mutating func run() async throws {
             do {
-                let path = pathOptions.resolvedPath
-                let data = try Data(contentsOf: URL(fileURLWithPath: path))
-                let jsonDecoder = JSONDecoder()
-                let contactTemplates: [ContactTemplate] = try jsonDecoder.decode([ContactTemplate].self, from: data)
-
-                let contactsGenerator = ContactGenerator(numberOfContacts: contactGenerationOptions.numberOfContacts, contactTemplates: contactTemplates, basePath: path.removingLastPathComponent())
-                let requests = contactsGenerator.generateContacts()
-
-                let personCreationWorker = PersonCreationWorker(userCredentialsOptions: userCredentialsOptions)
-                try await personCreationWorker.createPersons(requests)
+                try await AppsuiteService().generateContacts(userCredentialsOptions.credentials, templatesPath: pathOptions.resolvedPath, count: contactGenerationOptions.numberOfContacts, onProgress: ProgressEvent.consolePrinter())
             }
             catch {
                 print("An error occurred: \(error)")

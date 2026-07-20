@@ -6,17 +6,19 @@ class AppointmentCreationWorker: InfostoreBaseWorker {
     var calendarFolder: String!
     var invitee: Person!
 
-    func createAppointments(appointmentRequests: [AppointmentRequest]) async throws {
+    func createAppointments(appointmentRequests: [AppointmentRequest], onProgress: ProgressHandler = { _ in }) async throws {
         try await login()
         try await getUserSettings()
-        
-        for request in appointmentRequests {
+
+        let total = appointmentRequests.count
+        for (index, request) in appointmentRequests.enumerated() {
             let appointment = Appointment.from(request, person: invitee, folder: calendarFolder, timezone: userTimezone)
             let createAppointmentCommand = CreateAppointmentCommand(session: remoteSession, appointment: appointment)
             guard let _ = try await createAppointmentCommand.execute() else {
-                print("Could not crate appointment.")
+                onProgress(.failed("appointments", "Could not create appointment \(index + 1) of \(total)."))
                 return
             }
+            onProgress(.progress("appointments", current: index + 1, total: total, "Created appointment \(index + 1) of \(total)"))
         }
 
         try await logout()

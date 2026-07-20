@@ -18,6 +18,10 @@ struct UserCredentialsOptions: ParsableArguments {
 
     @Option(name: [.customShort("p"), .customLong("password")], help: "User Password")
     var password: String
+
+    var credentials: Credentials {
+        Credentials(server: server, userName: userName, password: password, validateCertificate: validateCertificate)
+    }
 }
 
 struct ImportPathOptions: ParsableArguments {

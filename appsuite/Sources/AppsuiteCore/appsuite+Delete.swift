@@ -15,8 +15,7 @@ extension Appsuite {
 
         mutating func run() async throws {
             do {
-                let deleteEventsWorker = DeleteEventsWorker(userCredentialsOptions: userCredentialsOptions)
-                try await deleteEventsWorker.deleteEvents(years: deleteOptions.years)
+                try await AppsuiteService().deleteAppointments(userCredentialsOptions.credentials, years: deleteOptions.years, onProgress: ProgressEvent.consolePrinter())
             }
             catch {
                 print("An error occurred: \(error)")

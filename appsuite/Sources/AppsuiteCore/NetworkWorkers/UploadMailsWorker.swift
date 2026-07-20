@@ -11,10 +11,10 @@ class UploadMailsWorker: InfostoreBaseWorker {
     /// discovery failed, in which case everything falls back to name lookup.
     private var standardFolders: [StandardFolderRole: String] = [:]
 
-    init(userCredentialsOptions: UserCredentialsOptions, adjustrecipient: Bool = false, stretchPeriod: Int? = nil) {
+    init(credentials: Credentials, adjustrecipient: Bool = false, stretchPeriod: Int? = nil) {
         self.adjustRecipient = adjustrecipient
         self.stretchPeriod = stretchPeriod
-        super.init(userCredentialsOptions: userCredentialsOptions)
+        super.init(credentials: credentials)
     }
 
     func prepare() async throws {
@@ -23,7 +23,7 @@ class UploadMailsWorker: InfostoreBaseWorker {
         await discoverStandardFolders()
     }
 
-    func uploadMails(paths: [String], to folder: String) async throws {
+    func uploadMails(paths: [String], to folder: String, onProgress: ProgressHandler = { _ in }) async throws {
         guard var mails = try loadMails(from: paths) else { return }
 
         let mailRecipient = adjustRecipient ? self.recipient!.email1 : nil
@@ -32,8 +32,10 @@ class UploadMailsWorker: InfostoreBaseWorker {
             mails = modifyWorker.alteredMails()
         }
 
-        for mail in mails {
+        let total = mails.count
+        for (index, mail) in mails.enumerated() {
             try await uploadMail(mail, to: folder)
+            onProgress(.progress("mails", current: index + 1, total: total, "Uploaded mail \(index + 1) of \(total) into \(folder)"))
         }
     }
 
