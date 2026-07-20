@@ -1,0 +1,9 @@
+services:
+  seeder:
+    build:
+      # Repo root, so the build can see both ./appsuite and ./webservice and ./Demo.
+      context: ..
+      dockerfile: webservice/Dockerfile
+    ports:
+      - "8080:8080"
+    restart: unless-stopped

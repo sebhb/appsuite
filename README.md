@@ -49,6 +49,17 @@ This tool is compatible with any App Suite 7.10.6 or higher regardless of locati
 
 Use `appsuite --help` for any subcommand. All custom JSON formates for data import and data generation are documented there.
 
+### Web service
+
+Alongside the CLI there is a small web service (in the `webservice/` directory) that offers
+the same seeding through a browser UI: enter a server URL and credentials, tick which
+categories to seed (mails, contacts, appointments, tasks, files), and watch live progress.
+It reuses the same `AppsuiteCore` library the CLI is built on, and can be run locally or as
+a container. See [`webservice/README.md`](webservice/README.md).
+
+The CLI also gained a `check drive` subcommand that reports whether the Drive capability is
+enabled for a user (the web service uses this to gate file uploads).
+
 ### Why Swift
 
 [Swift](https://www.swift.org) is a modern and robust programming language. Apple's [Argument Parser](https://github.com/apple/swift-argument-parser) is a powerful package for the processing of command line arguments. Swift uses [ARC](https://en.wikipedia.org/wiki/Automatic_Reference_Counting) and not [Garbage Collection with all of its disadvantages](https://www.swift.org/blog/swift-at-apple-migrating-the-password-monitoring-service-from-java/).

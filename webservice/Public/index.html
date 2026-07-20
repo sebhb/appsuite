@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Suite Data Seeder</title>
+    <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <span class="logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/>
+                </svg>
+            </span>
+            <div>
+                <h1>App Suite Data Seeder</h1>
+                <p class="subtitle">Fill a test account with demo data</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Connection -->
+        <section class="card">
+            <h2>Connection</h2>
+            <div class="grid">
+                <label class="field">
+                    <span>App Suite</span>
+                    <select id="serverSelect">
+                        <option value="eu.appsuite.cloud" selected>Cloud EU (eu.appsuite.cloud)</option>
+                        <option value="us.appsuite.cloud">Cloud US (us.appsuite.cloud)</option>
+                        <option value="oxcloud.family">OX Cloud Family (oxcloud.family)</option>
+                        <option value="custom">Custom…</option>
+                    </select>
+                </label>
+                <label class="field cell-hidden" id="serverUrlField">
+                    <span>Server URL</span>
+                    <input id="server" type="text" placeholder="appsuite.example.com" autocomplete="off">
+                </label>
+                <label class="field">
+                    <span>Username</span>
+                    <input id="userName" type="text" placeholder="user@context" autocomplete="username">
+                </label>
+                <label class="field">
+                    <span>Password</span>
+                    <input id="password" type="password" placeholder="••••••••" autocomplete="current-password">
+                </label>
+            </div>
+            <div class="row between spaced">
+                <div class="stack">
+                    <label class="checkbox">
+                        <input id="insecure" type="checkbox">
+                        <span>Ignore invalid TLS certificates</span>
+                    </label>
+                    <span class="hint">Connect even if the server uses a self-signed or otherwise untrusted certificate.</span>
+                </div>
+                <div class="row">
+                    <button id="checkDriveBtn" class="btn ghost">Check Drive</button>
+                    <span id="drivePill" class="pill hidden"></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories -->
+        <section class="card">
+            <h2>What to seed</h2>
+            <p class="muted">Bundled demo data is used by default. Switch a category to “Upload my own” to provide your own files.</p>
+            <div id="categories" class="categories"></div>
+        </section>
+
+        <!-- Run -->
+        <section class="card">
+            <div class="row between">
+                <h2>Run</h2>
+                <button id="runBtn" class="btn primary">Start seeding</button>
+            </div>
+            <div id="runStatus" class="muted">Fill in the connection details and press “Start seeding”.</div>
+            <div id="operations" class="operations"></div>
+            <details id="logDetails" class="log-details hidden">
+                <summary>Detailed log</summary>
+                <pre id="log" class="log"></pre>
+            </details>
+        </section>
+
+        <!-- Delete appointments (danger) -->
+        <section class="card danger">
+            <div class="row">
+                <span class="danger-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/>
+                    </svg>
+                </span>
+                <h2>Delete all appointments</h2>
+            </div>
+            <p class="muted">
+                Deleting appointments here is intentional: the generated demo appointments may contain
+                <strong>real email addresses</strong> as participants. Removing such an appointment in the App Suite UI
+                would send a cancellation email to those people. This action deletes appointments directly via the API
+                <strong>without notifying any participants</strong>.
+            </p>
+            <div class="row between spaced">
+                <label class="field inline">
+                    <span>Range around today</span>
+                    <select id="deleteYears">
+                        <option value="1">± 1 year</option>
+                        <option value="2">± 2 years</option>
+                        <option value="3">± 3 years</option>
+                        <option value="4">± 4 years</option>
+                        <option value="5">± 5 years</option>
+                    </select>
+                </label>
+                <button id="deleteBtn" class="btn danger">Delete appointments</button>
+            </div>
+            <div id="deleteStatus" class="muted"></div>
+            <div id="deleteOperations" class="operations"></div>
+            <details id="deleteLogDetails" class="log-details hidden">
+                <summary>Detailed log</summary>
+                <pre id="deleteLog" class="log"></pre>
+            </details>
+        </section>
+    </main>
+
+    <script src="/app.js"></script>
+</body>
+</html>
