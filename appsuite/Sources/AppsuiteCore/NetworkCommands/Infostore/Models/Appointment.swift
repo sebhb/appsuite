@@ -83,7 +83,10 @@ struct Appointment: Decodable, Encodable {
         let end = DateTime(value: request.endTime, tzid: timezone)
 
         let organizer = person.organizer
-        let attendees = [person.attendee] + (request.guests?.map { $0.guest } ?? [])
+        // Guests without an email would yield a `mailto:` attendee URI with no address,
+        // which App Suite 7.10.6 rejects. Only invite guests that have an email address.
+        let guestAttendees = (request.guests ?? []).filter { !$0.email1.isEmpty }.map { $0.guest }
+        let attendees = [person.attendee] + guestAttendees
 
         let appointment = Appointment(folder: folderId, startDate: start, endDate: end, class: "PUBLIC", transp: "OPAQUE", organizer: organizer, attendees: attendees, attendeePrivileges: "DEFAULT", summary: request.title, location: request.location, description: request.description, categories: nil)
 

@@ -29,12 +29,18 @@ class GetContactsCommand: NetworkCommand<[Person]> {
         let contactsArray = try decoder.decode(GetColumnsResponse.self, from: data)
         let contacts = contactsArray.data
 
-        let result = contacts.map() {
-            let firstName = $0[1]
-            let lastName = $0[2]
-            let displayName = $0[3] ?? ""
-            let email1 = $0[4] ?? ""
-            let id = Int($0[0] ?? "0") ?? 0
+        let result = contacts.compactMap() { columns -> Person? in
+            let firstName = columns[1]
+            let lastName = columns[2]
+            let displayName = columns[3] ?? ""
+            let email1 = columns[4] ?? ""
+            let id = Int(columns[0] ?? "0") ?? 0
+
+            // A contact without an email address cannot be a calendar guest: it would
+            // produce a `mailto:` attendee URI with no address, which App Suite 7.10.6
+            // rejects with "The calendar user \"mailto:\" is invalid." Skip such contacts.
+            guard !email1.isEmpty else { return nil }
+
             return Person(firstName: firstName, lastName: lastName, displayName: displayName, userId: id, email1: email1)
         }
 
