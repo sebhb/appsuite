@@ -257,9 +257,7 @@
 			}
 		],
 		"emailDomains": [
-			"yahoo.com",
-			"gmail.com",
-			"icloud.com"
+			"demo.ox.io"
 		],
 		"probabilityOfAddress": 0.75,
 		"probabilityOfEmail": 0.75,
@@ -523,9 +521,7 @@
 			}
 		],
 		"emailDomains": [
-			"yahoo.com",
-			"gmail.com",
-			"icloud.com"
+			"demo.ox.io"
 		],
 		"probabilityOfAddress": 0.75,
 		"probabilityOfEmail": 0.75,

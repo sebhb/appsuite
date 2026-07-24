@@ -60,14 +60,13 @@ class NetworkCommand<T: Decodable>: NSObject {
 
         var serverAddress = "https://" + self.serverInfo.serverAddress + "/"
 
-        var cSet = CharacterSet.urlQueryAllowed
-        cSet.remove(charactersIn: "/")
-
-        let encodedParameters = parameters.encodedAsURLParameters().addingPercentEncoding(withAllowedCharacters: cSet)
+        // `encodedAsURLParameters()` percent-encodes each key and value, so the
+        // joined query string is already safe to append verbatim.
+        let encodedParameters = parameters.encodedAsURLParameters()
 
         serverAddress += function
         if parameters.count > 0 {
-            serverAddress += "?" + encodedParameters!
+            serverAddress += "?" + encodedParameters
         }
 
         let client = HTTPClient(eventLoopGroupProvider: .singleton)

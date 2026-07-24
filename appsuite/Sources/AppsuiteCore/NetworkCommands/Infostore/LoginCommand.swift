@@ -28,7 +28,10 @@ class LoginCommand: NetworkCommand<Session> {
     }
 
     override func requestData() -> Data {
-        return "name=\(userName)&password=\(password)".data(using: .utf8)!
+        // Reuse the shared form-urlencoded encoder so credentials containing
+        // special characters (#, %, &, +, =, …) are escaped correctly.
+        let body = ["name": userName, "password": password].encodedAsURLParameters()
+        return body.data(using: .utf8)!
     }
 
     override func oxFunction() -> String {
