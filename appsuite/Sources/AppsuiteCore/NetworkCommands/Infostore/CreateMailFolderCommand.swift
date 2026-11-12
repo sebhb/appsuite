@@ -4,10 +4,15 @@ class CreateMailFolderCommand: NetworkCommand<CreateFolderResponse> {
 
     let remoteSession: RemoteSession
     let folderName: String
+    /// Full ID of the parent folder, e.g. `default0` (account root) or
+    /// `default0/INBOX`. Child IDs are server-defined, so always pass an ID the
+    /// server returned rather than one assembled from folder names.
+    let parentID: String
 
-    init(session: RemoteSession, folderName: String) {
+    init(session: RemoteSession, folderName: String, parentID: String = "default0") {
         self.remoteSession = session
         self.folderName = folderName
+        self.parentID = parentID
         super.init(serverInfo: remoteSession.serverInfo)
     }
 
@@ -16,7 +21,7 @@ class CreateMailFolderCommand: NetworkCommand<CreateFolderResponse> {
     }
 
     override func requestParameters() -> [String : String] {
-        return ["action": "new", "autorename": "true", "folder_id": "default0", "session": remoteSession.session]
+        return ["action": "new", "autorename": "true", "folder_id": parentID, "session": remoteSession.session]
     }
 
     override func oxFunction() -> String {

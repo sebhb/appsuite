@@ -1,6 +1,4 @@
 import Foundation
-import AsyncHTTPClient
-import NIOCore
 
 struct SimpleCookie {
     let name: String
@@ -11,9 +9,8 @@ class CookieJar {
 
     var cookieJar: [String: [String: SimpleCookie]] = [:] // host -> name -> cookie
 
-    func storeCookies(from response: HTTPClientResponse, for host: String) {
-        // Alle Set-Cookie-Header holen …
-        for value in response.headers["set-cookie"] {
+    func storeCookies(fromSetCookieHeaders headers: [String], for host: String) {
+        for value in headers {
             // Einfachster Parser (Name=Value; …)
             guard let first = value.split(separator: ";").first,
                   let eq = first.firstIndex(of: "=") else { continue }
@@ -23,10 +20,10 @@ class CookieJar {
         }
     }
 
-    func applyCookies(to request: inout HTTPClientRequest, for host: String) {
-        guard let jar = cookieJar[host], !jar.isEmpty else { return }
-        let header = jar.values.map { "\($0.name)=\($0.value)" }.joined(separator: "; ")
-        request.headers.add(name: "Cookie", value: header)
+    /// The `Cookie` header value for `host`, or `nil` if no cookies are stored.
+    func cookieHeader(for host: String) -> String? {
+        guard let jar = cookieJar[host], !jar.isEmpty else { return nil }
+        return jar.values.map { "\($0.name)=\($0.value)" }.joined(separator: "; ")
     }
 
 }

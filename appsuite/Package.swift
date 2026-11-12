@@ -42,5 +42,11 @@ let package = Package(
                 "AppsuiteCore",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
             ]),
+        .testTarget(
+            name: "AppsuiteCoreTests",
+            dependencies: [
+                "AppsuiteCore",
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+            ]),
     ]
 )

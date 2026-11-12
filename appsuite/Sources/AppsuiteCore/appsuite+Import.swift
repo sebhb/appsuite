@@ -17,7 +17,9 @@ extension Appsuite {
                 ├── DUMPSTER
                 ├── INBOX
                 │   ├── 70.eml
-                │   └── 75.eml
+                │   ├── 75.eml
+                │   └── Projects
+                │       └── 80.eml
                 ├── Sent
                 ├── Sent Items
                 │   ├── 3.eml
@@ -25,14 +27,17 @@ extension Appsuite {
                 ├── Spam
                 └── Trash
             
-            to upload emails to different target folders at once.
-            Should importFolderTree be set, the targetFolderName option gets ignored and createTargetFolderIfNecessary is automatically set. 
+            to upload emails to different target folders at once. Subfolders at any depth are recreated
+            beneath their parent folder (e.g. INBOX/Projects above).
+            Should importFolderTree be set, the targetFolderName option gets ignored and createTargetFolderIfNecessary is automatically set.
+            Mails are uploaded in batches (several mails per request), limited by --maxBatchSizeMB and --maxBatchCount. 
             """)
 
         @OptionGroup var userCredentialsOptions: UserCredentialsOptions
         @OptionGroup var pathOptions: ImportPathOptions
         @OptionGroup var importMailOptions: ImportMailOptions
         @OptionGroup var importStretchOptions: ImportStretchOptions
+        @OptionGroup var importBatchOptions: ImportBatchOptions
         @OptionGroup var importFolderTree: ImportFolderTreeOption
         @OptionGroup var createTargetFolderIfNecessary: GenerateTargetFolderOption
 
@@ -42,7 +47,7 @@ extension Appsuite {
             do {
                 let path = pathOptions.resolvedPath
                 if importFolderTree.importFolderTree {
-                    try await service.importMailTree(userCredentialsOptions.credentials, treeRoot: path, adjustRecipient: importMailOptions.adjustRecipient, stretchPeriod: importStretchOptions.stretchPeriod, onProgress: progress)
+                    try await service.importMailTree(userCredentialsOptions.credentials, treeRoot: path, adjustRecipient: importMailOptions.adjustRecipient, stretchPeriod: importStretchOptions.stretchPeriod, batchLimits: importBatchOptions.batchLimits, onProgress: progress)
                 }
                 else {
                     let files = try FileManager.default.contentsOfDirectory(atPath: path).filter { $0.hasSuffix(".eml") }.map { path.appendingPathComponent($0) }
@@ -50,7 +55,7 @@ extension Appsuite {
                         print(".eml files not found in \(path)")
                         return
                     }
-                    try await service.importMails(userCredentialsOptions.credentials, mailPaths: files, targetFolder: importMailOptions.targetFolderName, createFolder: createTargetFolderIfNecessary.createTargetFolderIfNecessary, adjustRecipient: importMailOptions.adjustRecipient, stretchPeriod: importStretchOptions.stretchPeriod, onProgress: progress)
+                    try await service.importMails(userCredentialsOptions.credentials, mailPaths: files, targetFolder: importMailOptions.targetFolderName, createFolder: createTargetFolderIfNecessary.createTargetFolderIfNecessary, adjustRecipient: importMailOptions.adjustRecipient, stretchPeriod: importStretchOptions.stretchPeriod, batchLimits: importBatchOptions.batchLimits, onProgress: progress)
                 }
             }
             catch {

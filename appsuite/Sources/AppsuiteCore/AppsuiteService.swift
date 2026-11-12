@@ -7,21 +7,31 @@ import Foundation
 /// next operation.
 public struct AppsuiteService: Sendable {
 
-    public init() {}
+    /// How requests reach the server; tests substitute a fake App Suite.
+    let transport: any HTTPTransport
+
+    public init() {
+        self.init(transport: AsyncHTTPClientTransport())
+    }
+
+    init(transport: any HTTPTransport) {
+        self.transport = transport
+    }
 
     // MARK: Drive capability
 
     /// Logs in, checks the `drive` capability, logs out, and returns the result.
     public func checkDriveEnabled(_ credentials: Credentials) async throws -> Bool {
-        try await CapabilityWorker(credentials: credentials).driveEnabled()
+        try await CapabilityWorker(credentials: credentials, transport: transport).driveEnabled()
     }
 
     // MARK: Mails
 
-    /// Imports a mail folder tree: every immediate subdirectory of `treeRoot`
-    /// becomes a target folder (standard folders are resolved to their real
-    /// server names, custom ones are created). Mirrors `--importFolderTree`.
-    public func importMailTree(_ credentials: Credentials, treeRoot: String, adjustRecipient: Bool, stretchPeriod: Int?, onProgress: @escaping ProgressHandler) async throws {
+    /// Imports a mail folder tree: every subdirectory of `treeRoot` (at any depth)
+    /// becomes a target folder with the same hierarchy. Top-level standard
+    /// folders are resolved to their real server names, everything else is
+    /// created as needed. Mirrors `--importFolderTree`.
+    public func importMailTree(_ credentials: Credentials, treeRoot: String, adjustRecipient: Bool, stretchPeriod: Int?, batchLimits: MailBatchLimits = .default, onProgress: @escaping ProgressHandler) async throws {
         onProgress(.started("mails", "Importing mail folder tree"))
         let uploads = try mailUploadsForTree(at: treeRoot)
         guard !uploads.isEmpty else {
@@ -29,10 +39,17 @@ public struct AppsuiteService: Sendable {
             return
         }
 
-        let worker = UploadMailsWorker(credentials: credentials, adjustrecipient: adjustRecipient, stretchPeriod: stretchPeriod)
+        let worker = UploadMailsWorker(credentials: credentials, adjustrecipient: adjustRecipient, stretchPeriod: stretchPeriod, batchLimits: batchLimits, transport: transport)
         try await worker.prepare()
         for upload in uploads {
-            let folder = try await worker.ensureTargetFolderExists(upload.targetFolder)
+            let folder: String
+            do {
+                folder = try await worker.ensureTargetFolderPath(upload.targetFolder, onProgress: onProgress)
+            } catch {
+                // Skip this folder (and its mails) but keep importing the rest.
+                onProgress(.failed("mails", "Skipping \(upload.targetFolder.joined(separator: "/")): \(error)"))
+                continue
+            }
             try await worker.uploadMails(paths: upload.mailPaths, to: folder, onProgress: onProgress)
         }
         try await worker.logout()
@@ -40,11 +57,11 @@ public struct AppsuiteService: Sendable {
     }
 
     /// Imports a flat set of `.eml` files into a single target folder.
-    public func importMails(_ credentials: Credentials, mailPaths: [String], targetFolder: String = "INBOX", createFolder: Bool = false, adjustRecipient: Bool, stretchPeriod: Int?, onProgress: @escaping ProgressHandler) async throws {
+    public func importMails(_ credentials: Credentials, mailPaths: [String], targetFolder: String = "INBOX", createFolder: Bool = false, adjustRecipient: Bool, stretchPeriod: Int?, batchLimits: MailBatchLimits = .default, onProgress: @escaping ProgressHandler) async throws {
         onProgress(.started("mails", "Importing \(mailPaths.count) mail(s) into \(targetFolder)"))
-        let worker = UploadMailsWorker(credentials: credentials, adjustrecipient: adjustRecipient, stretchPeriod: stretchPeriod)
+        let worker = UploadMailsWorker(credentials: credentials, adjustrecipient: adjustRecipient, stretchPeriod: stretchPeriod, batchLimits: batchLimits, transport: transport)
         try await worker.prepare()
-        let folder = createFolder ? try await worker.ensureTargetFolderExists(targetFolder) : targetFolder
+        let folder = createFolder ? try await worker.ensureTargetFolderExists(targetFolder, onProgress: onProgress) : targetFolder
         try await worker.uploadMails(paths: mailPaths, to: folder, onProgress: onProgress)
         try await worker.logout()
         onProgress(.finished("mails", "Mail import complete."))
@@ -55,7 +72,7 @@ public struct AppsuiteService: Sendable {
     /// Uploads files (and folder hierarchies) to the user's Drive root.
     public func importFiles(_ credentials: Credentials, paths: [String], onProgress: @escaping ProgressHandler) async throws {
         onProgress(.started("files", "Uploading files to Drive"))
-        try await UploadFilesWorker(credentials: credentials).uploadFiles(paths, onProgress: onProgress)
+        try await UploadFilesWorker(credentials: credentials, transport: transport).uploadFiles(paths, onProgress: onProgress)
         onProgress(.finished("files", "File upload complete."))
     }
 
@@ -65,7 +82,7 @@ public struct AppsuiteService: Sendable {
     public func importTasks(_ credentials: Credentials, jsonPath: String, onProgress: @escaping ProgressHandler) async throws {
         onProgress(.started("tasks", "Importing tasks"))
         let tasks: [TaskRequest] = try decodeJSON(at: jsonPath)
-        try await TaskCreationWorker(credentials: credentials).createTasks(tasks, onProgress: onProgress)
+        try await TaskCreationWorker(credentials: credentials, transport: transport).createTasks(tasks, onProgress: onProgress)
         onProgress(.finished("tasks", "Task import complete."))
     }
 
@@ -77,7 +94,7 @@ public struct AppsuiteService: Sendable {
         let templates: [ContactTemplate] = try decodeJSON(at: templatesPath)
         let generator = ContactGenerator(numberOfContacts: count, contactTemplates: templates, basePath: templatesPath.removingLastPathComponent())
         let requests = generator.generateContacts()
-        try await PersonCreationWorker(credentials: credentials).createPersons(requests, onProgress: onProgress)
+        try await PersonCreationWorker(credentials: credentials, transport: transport).createPersons(requests, onProgress: onProgress)
         onProgress(.finished("contacts", "Contact generation complete."))
     }
 
@@ -86,7 +103,7 @@ public struct AppsuiteService: Sendable {
         onProgress(.started("contacts", "Importing contacts"))
         let requests: [NewPersonRequest] = try decodeJSON(at: jsonPath)
         let withAvatars = requests.map { NewPersonWithAvatar.from($0, basePath: jsonPath.removingLastPathComponent()) }
-        try await PersonCreationWorker(credentials: credentials).createPersons(withAvatars, onProgress: onProgress)
+        try await PersonCreationWorker(credentials: credentials, transport: transport).createPersons(withAvatars, onProgress: onProgress)
         onProgress(.finished("contacts", "Contact import complete."))
     }
 
@@ -95,12 +112,12 @@ public struct AppsuiteService: Sendable {
     /// Generates appointments over `days` from a templates JSON file (bundled).
     public func generateAppointments(_ credentials: Credentials, templatesPath: String, days: Int, locale localeId: String, onProgress: @escaping ProgressHandler) async throws {
         onProgress(.started("appointments", "Generating appointments over \(days) days"))
-        let contacts = try await GetContactsWorker(credentials: credentials).getContacts()
+        let contacts = try await GetContactsWorker(credentials: credentials, transport: transport).getContacts()
         let templates: [AppointmentTemplate] = try decodeJSON(at: templatesPath)
         let locale = Locale(identifier: localeId)
         let generator = AppointmentGenerator.generator(days: days, appointmentDesciptions: templates, contacts: contacts, locale: locale)
         let requests = generator.generateAppointments()
-        try await AppointmentCreationWorker(credentials: credentials).createAppointments(appointmentRequests: requests, onProgress: onProgress)
+        try await AppointmentCreationWorker(credentials: credentials, transport: transport).createAppointments(appointmentRequests: requests, onProgress: onProgress)
         onProgress(.finished("appointments", "Appointment generation complete."))
     }
 
@@ -108,7 +125,7 @@ public struct AppsuiteService: Sendable {
     public func importAppointments(_ credentials: Credentials, jsonPath: String, onProgress: @escaping ProgressHandler) async throws {
         onProgress(.started("appointments", "Importing appointments"))
         let requests: [AppointmentRequest] = try decodeJSON(at: jsonPath)
-        try await AppointmentCreationWorker(credentials: credentials).createAppointments(appointmentRequests: requests, onProgress: onProgress)
+        try await AppointmentCreationWorker(credentials: credentials, transport: transport).createAppointments(appointmentRequests: requests, onProgress: onProgress)
         onProgress(.finished("appointments", "Appointment import complete."))
     }
 
@@ -119,7 +136,7 @@ public struct AppsuiteService: Sendable {
     /// App Suite UI, which would email everyone involved).
     public func deleteAppointments(_ credentials: Credentials, years: Int, onProgress: @escaping ProgressHandler) async throws {
         onProgress(.started("delete", "Deleting appointments within ±\(years) year(s)"))
-        try await DeleteEventsWorker(credentials: credentials).deleteEvents(years: years, onProgress: onProgress)
+        try await DeleteEventsWorker(credentials: credentials, transport: transport).deleteEvents(years: years, onProgress: onProgress)
         onProgress(.finished("delete", "Appointment deletion complete."))
     }
 
@@ -130,8 +147,9 @@ public struct AppsuiteService: Sendable {
         return try JSONDecoder().decode(T.self, from: data)
     }
 
-    private struct MailUpload {
-        let targetFolder: String
+    struct MailUpload {
+        /// Folder path relative to the tree root, outermost first.
+        let targetFolder: [String]
         let mailPaths: [String]
     }
 
@@ -140,16 +158,30 @@ public struct AppsuiteService: Sendable {
         return files.filter { $0.hasSuffix(".eml") }.map { path.appendingPathComponent($0) }
     }
 
-    private func mailUploadsForTree(at rootPath: String) throws -> [MailUpload] {
-        let targetFolders = try FileManager.default.contentsOfDirectory(atPath: rootPath).filter { !$0.hasPrefix(".") }
+    /// Walks the tree below `rootPath` recursively. Every directory containing
+    /// `.eml` files becomes one upload; directories without mails are only
+    /// created as needed for their descendants. Parents sort before children.
+    func mailUploadsForTree(at rootPath: String) throws -> [MailUpload] {
         var result = [MailUpload]()
-        for folder in targetFolders {
-            let basePath = rootPath.appendingPathComponent(folder)
-            let mails = emlPaths(at: basePath)
-            if !mails.isEmpty {
-                result.append(MailUpload(targetFolder: folder, mailPaths: mails))
+
+        func visit(_ path: String, components: [String]) throws {
+            let children = try FileManager.default.contentsOfDirectory(atPath: path)
+                .filter { !$0.hasPrefix(".") }
+                .sorted()
+            for child in children {
+                let childPath = path.appendingPathComponent(child)
+                var isDirectory: ObjCBool = false
+                guard FileManager.default.fileExists(atPath: childPath, isDirectory: &isDirectory), isDirectory.boolValue else { continue }
+                let childComponents = components + [child]
+                let mails = emlPaths(at: childPath)
+                if !mails.isEmpty {
+                    result.append(MailUpload(targetFolder: childComponents, mailPaths: mails))
+                }
+                try visit(childPath, components: childComponents)
             }
         }
+
+        try visit(rootPath, components: [])
         return result
     }
 }
