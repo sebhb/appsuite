@@ -48,6 +48,18 @@ struct ImportStretchOptions: ParsableArguments {
     var stretchPeriod: Int?
 }
 
+struct ImportBatchOptions: ParsableArguments {
+    @Option(name: [.customLong("maxBatchSizeMB")], help: "Maximum size (in MB) of mails sent in one upload request. A single larger mail is still sent on its own.")
+    var maxBatchSizeMB: Int = 8
+
+    @Option(name: [.customLong("maxBatchCount")], help: "Maximum number of mails sent in one upload request. Use 1 to upload mails one by one.")
+    var maxBatchCount: Int = 50
+
+    var batchLimits: MailBatchLimits {
+        MailBatchLimits(maxMegabytes: maxBatchSizeMB, maxCount: maxBatchCount)
+    }
+}
+
 struct ImportMailOptions: ParsableArguments {
     @Option(name: [.customLong("adjustRecipient")], help: "Set the recipient to the user importing the mails")
     var adjustRecipient: Bool = false

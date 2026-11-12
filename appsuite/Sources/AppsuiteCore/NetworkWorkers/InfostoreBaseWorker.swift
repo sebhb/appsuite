@@ -3,22 +3,24 @@ import Foundation
 class InfostoreBaseWorker {
 
     let credentials: Credentials
+    let transport: any HTTPTransport
     var remoteSession: RemoteSession!
 
-    init(credentials: Credentials) {
+    init(credentials: Credentials, transport: any HTTPTransport = AsyncHTTPClientTransport()) {
         self.credentials = credentials
+        self.transport = transport
     }
 
     func login() async throws {
         let cookieJar = CookieJar()
-        let serverInfo = ServerInfo(serverAddress: credentials.server, cookieJar: cookieJar, certificateVerification: credentials.validateCertificate)
+        let serverInfo = ServerInfo(serverAddress: credentials.server, cookieJar: cookieJar, certificateVerification: credentials.validateCertificate, transport: transport)
         let loginCommand = LoginCommand(userName: credentials.userName, password: credentials.password, serverInfo: serverInfo)
 
         guard let session = try await loginCommand.execute() else {
             print("Could not acquire session.")
             return
         }
-        remoteSession = RemoteSession(session: session.session, server: credentials.server, cookieJar: cookieJar)
+        remoteSession = RemoteSession(session: session.session, server: credentials.server, cookieJar: cookieJar, certificateVerification: credentials.validateCertificate, transport: transport)
     }
 
     func logout() async throws {

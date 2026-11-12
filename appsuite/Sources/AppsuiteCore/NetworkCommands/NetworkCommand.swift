@@ -1,8 +1,4 @@
 import Foundation
-import AsyncHTTPClient
-import NIOHTTP1
-import NIOSSL
-import NIOFoundationCompat
 
 class NetworkCommand<T: Decodable>: NSObject {
     let serverInfo: ServerInfo
@@ -69,11 +65,6 @@ class NetworkCommand<T: Decodable>: NSObject {
             serverAddress += "?" + encodedParameters
         }
 
-        let client = HTTPClient(eventLoopGroupProvider: .singleton)
-        defer {
-            let _ = client.shutdown()
-        }
-
         var headers = [String: String]()
         var bodyData: Data?
 
@@ -104,36 +95,29 @@ class NetworkCommand<T: Decodable>: NSObject {
             headers[key] = value
         }
 
-        var request = HTTPClientRequest(url: serverAddress)
-        request.method = HTTPMethod(rawValue: method().rawValue)
-        if headers.count > 0 {
-            request.headers = HTTPHeaders(headers.map { ($0, $1) })
-        }
-        if let bodyData = bodyData {
-            request.body = .bytes(bodyData)
-        }
-
-        if serverInfo.certificateVerification == false {
-            var tls = TLSConfiguration.makeClientConfiguration()
-            tls.certificateVerification = .none
-            request.tlsConfiguration = tls
-        }
-
         // Apply cookies
-        serverInfo.cookieJar.applyCookies(to: &request, for: self.serverInfo.serverAddress)
+        if let cookieHeader = serverInfo.cookieJar.cookieHeader(for: serverInfo.serverAddress) {
+            headers["Cookie"] = cookieHeader
+        }
 
-        let response = try await client.execute(request, timeout: .seconds(requestTimeoutSeconds()))
-        if response.status.code != 200 {
-            let error = NSError(domain: "NetworkCommand", code: Int(response.status.code), userInfo: nil)
+        let request = HTTPRequest(
+            method: method(),
+            url: serverAddress,
+            headers: headers,
+            body: bodyData,
+            timeoutSeconds: requestTimeoutSeconds(),
+            certificateVerification: serverInfo.certificateVerification
+        )
+        let response = try await serverInfo.transport.send(request)
+        if response.status != 200 {
+            let error = NSError(domain: "NetworkCommand", code: response.status, userInfo: nil)
             throw error
         }
 
         // Save cookies
-        serverInfo.cookieJar.storeCookies(from: response, for: self.serverInfo.serverAddress)
+        serverInfo.cookieJar.storeCookies(fromSetCookieHeaders: response.headerValues("set-cookie"), for: serverInfo.serverAddress)
 
-        let expected = response.headers.first(name: "content-length").flatMap(Int.init) ?? 1_048_576 // 1 MiB
-        let buf = try await response.body.collect(upTo: expected)
-        let data = Data(buffer: buf)
+        let data = response.body
 
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase

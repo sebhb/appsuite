@@ -4,10 +4,13 @@ class GetSubfoldersCommand: NetworkCommand<[Subfolder]> {
 
     let remoteSession: RemoteSession
     let folder: String
+    /// Also list folders the user is not subscribed to (`all=1`).
+    let includeUnsubscribed: Bool
 
-    init(folder: String, session: RemoteSession) {
+    init(folder: String, session: RemoteSession, includeUnsubscribed: Bool = false) {
         self.remoteSession = session
         self.folder = folder
+        self.includeUnsubscribed = includeUnsubscribed
         super.init(serverInfo: session.serverInfo)
     }
 
@@ -16,7 +19,11 @@ class GetSubfoldersCommand: NetworkCommand<[Subfolder]> {
     }
 
     override func requestParameters() -> [String : String] {
-        return ["action": "list", "columns": "1,300", "parent": folder, "session": remoteSession.session]
+        var parameters = ["action": "list", "columns": "1,300", "parent": folder, "session": remoteSession.session]
+        if includeUnsubscribed {
+            parameters["all"] = "1"
+        }
+        return parameters
     }
 
     override func oxFunction() -> String {
